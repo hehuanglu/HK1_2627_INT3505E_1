@@ -1,0 +1,255 @@
+{
+  "info": {
+    "name": "SOA Week 00 - Course Service Test Suite",
+    "_postman_id": "c1f72b9a-4e38-4e4b-97c2-849a9ef0b1e1",
+    "description": "Bộ sưu tập kiểm thử tự động cho Tuần 00 (Resource Naming Pattern & Basic Service Contract) học phần Kiến trúc hướng dịch vụ - VNU-UET.",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "variable": [
+    {
+      "key": "baseUrl",
+      "value": "http://localhost:3000",
+      "type": "string"
+    },
+    {
+      "key": "createdCourseId",
+      "value": "65e5f1a0b123456789abcdef",
+      "type": "string"
+    }
+  ],
+  "item": [
+    {
+      "name": "01. Health Check",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "exec": [
+              "pm.test('Status code is 200 OK', function () {",
+              "    pm.response.to.have.status(200);",
+              "});",
+              "",
+              "pm.test('Service status is UP', function () {",
+              "    const data = pm.response.json();",
+              "    pm.expect(data.status).to.eql('UP');",
+              "});"
+            ],
+            "type": "text/javascript"
+          }
+        }
+      ],
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "{{baseUrl}}/health",
+          "host": ["{{baseUrl}}"],
+          "path": ["health"]
+        },
+        "description": "Kiểm tra tình trạng sẵn sàng phục vụ của Service Provider."
+      }
+    },
+    {
+      "name": "02. List All Courses",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "exec": [
+              "pm.test('Status code is 200 OK', function () {",
+              "    pm.response.to.have.status(200);",
+              "});",
+              "",
+              "pm.test('Response contains courses array', function () {",
+              "    const data = pm.response.json();",
+              "    pm.expect(data).to.have.property('courses').that.is.an('array');",
+              "    pm.expect(data).to.have.property('total');",
+              "});"
+            ],
+            "type": "text/javascript"
+          }
+        }
+      ],
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "{{baseUrl}}/api/v1/courses",
+          "host": ["{{baseUrl}}"],
+          "path": ["api", "v1", "courses"]
+        },
+        "description": "Liệt kê danh sách tất cả các học phần (Collection Resource)."
+      }
+    },
+    {
+      "name": "03. Create Course (Valid)",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "exec": [
+              "pm.test('Status code is 201 Created', function () {",
+              "    pm.response.to.have.status(201);",
+              "});",
+              "",
+              "pm.test('Location header exists and points to new resource', function () {",
+              "    pm.expect(pm.response.headers.has('Location')).to.be.true;",
+              "});",
+              "",
+              "pm.test('Response contains created course id and correct fields', function () {",
+              "    const data = pm.response.json();",
+              "    pm.expect(data).to.have.property('_id');",
+              "    pm.expect(data.code).to.eql('INT3115');",
+              "    pm.collectionVariables.set('createdCourseId', data._id);",
+              "});"
+            ],
+            "type": "text/javascript"
+          }
+        }
+      ],
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"code\": \"INT3115\",\n  \"title\": \"Cloud Computing Architecture\",\n  \"credits\": 3,\n  \"department\": \"Bộ môn Mạng và Truyền thông máy tính\"\n}"
+        },
+        "url": {
+          "raw": "{{baseUrl}}/api/v1/courses",
+          "host": ["{{baseUrl}}"],
+          "path": ["api", "v1", "courses"]
+        },
+        "description": "Tạo mới một học phần hợp lệ và lưu lại ID cho các bước kế tiếp."
+      }
+    },
+    {
+      "name": "04. Create Course (Validation Error - Missing Code)",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "exec": [
+              "pm.test('Status code is 400 Bad Request', function () {",
+              "    pm.response.to.have.status(400);",
+              "});",
+              "",
+              "pm.test('Error payload contains informative message', function () {",
+              "    const data = pm.response.json();",
+              "    pm.expect(data).to.have.property('error');",
+              "    pm.expect(data).to.have.property('message');",
+              "});"
+            ],
+            "type": "text/javascript"
+          }
+        }
+      ],
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"title\": \"Invalid Course Without Code\",\n  \"credits\": 3\n}"
+        },
+        "url": {
+          "raw": "{{baseUrl}}/api/v1/courses",
+          "host": ["{{baseUrl}}"],
+          "path": ["api", "v1", "courses"]
+        },
+        "description": "Kiểm thử hành vi xử lý khi client gửi thiếu trường bắt buộc."
+      }
+    },
+    {
+      "name": "05. Get Course By ID",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "exec": [
+              "pm.test('Status code is 200 OK', function () {",
+              "    pm.response.to.have.status(200);",
+              "});",
+              "",
+              "pm.test('Returned course matches the created course ID', function () {",
+              "    const data = pm.response.json();",
+              "    pm.expect(data._id).to.eql(pm.collectionVariables.get('createdCourseId'));",
+              "});"
+            ],
+            "type": "text/javascript"
+          }
+        }
+      ],
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "{{baseUrl}}/api/v1/courses/{{createdCourseId}}",
+          "host": ["{{baseUrl}}"],
+          "path": ["api", "v1", "courses", "{{createdCourseId}}"]
+        },
+        "description": "Truy xuất chi tiết một học phần vừa tạo qua ID."
+      }
+    },
+    {
+      "name": "06. Delete Course By ID",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "exec": [
+              "pm.test('Status code is 204 No Content', function () {",
+              "    pm.response.to.have.status(204);",
+              "});"
+            ],
+            "type": "text/javascript"
+          }
+        }
+      ],
+      "request": {
+        "method": "DELETE",
+        "header": [],
+        "url": {
+          "raw": "{{baseUrl}}/api/v1/courses/{{createdCourseId}}",
+          "host": ["{{baseUrl}}"],
+          "path": ["api", "v1", "courses", "{{createdCourseId}}"]
+        },
+        "description": "Xóa học phần vừa tạo theo mã 204 No Content chuẩn RESTful."
+      }
+    },
+    {
+      "name": "07. Get Deleted Course (Expect 404 Not Found)",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "exec": [
+              "pm.test('Status code is 404 Not Found', function () {",
+              "    pm.response.to.have.status(404);",
+              "});"
+            ],
+            "type": "text/javascript"
+          }
+        }
+      ],
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "{{baseUrl}}/api/v1/courses/{{createdCourseId}}",
+          "host": ["{{baseUrl}}"],
+          "path": ["api", "v1", "courses", "{{createdCourseId}}"]
+        },
+        "description": "Xác nhận rằng tài nguyên đã bị loại bỏ hoàn toàn khỏi hệ thống."
+      }
+    }
+  ]
+}
