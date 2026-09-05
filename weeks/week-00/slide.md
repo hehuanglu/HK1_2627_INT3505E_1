@@ -2,43 +2,30 @@
 marp: true
 theme: default
 paginate: true
+size: 16:9
 header: "VNU-UET | Service-Oriented Architecture (SOA)"
-footer: "Department of Software Engineering"
+footer: "Khoa CNTT | Department of Software Engineering"
 style: |
   section {
-    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-    padding: 40px;
+    font-family: 'Segoe UI', Arial, Helvetica, sans-serif;
     font-size: 24px;
+    padding: 40px 50px;
+    color: #1a1a1a;
   }
-  h1 {
-    color: #003366;
-  }
-  h2 {
-    color: #006699;
-    border-bottom: 2px solid #e0e0e0;
-    padding-bottom: 8px;
-  }
-  footer {
-    font-size: 14px;
-    color: #888888;
-  }
-  header {
-    font-size: 14px;
-    color: #003366;
-    font-weight: bold;
-  }
-  table {
-    font-size: 20px;
-  }
-  th {
-    background-color: #003366;
-    color: white;
-  }
-  .highlight {
-    background-color: #fff3cd;
-    padding: 2px 6px;
-    border-radius: 4px;
-  }
+  h1 { color: #003366; font-size: 36px; margin-bottom: 16px; }
+  h2 { color: #006699; font-size: 30px; border-bottom: 2px solid #e0e0e0; padding-bottom: 8px; margin-bottom: 16px; }
+  h3 { color: #003366; font-size: 24px; margin-bottom: 8px; }
+  ul, ol { font-size: 22px; line-height: 1.6; }
+  li { margin-bottom: 6px; }
+  code { font-family: 'Consolas', 'JetBrains Mono', monospace; font-size: 18px; background: #f3f3f3; padding: 2px 6px; border-radius: 3px; color: #c7254e; }
+  pre { background: #1e1e1e; color: #d4d4d4; border-radius: 6px; padding: 16px 20px; font-size: 18px; line-height: 1.5; }
+  pre code { background: transparent; color: #d4d4d4; padding: 0; }
+  table { font-size: 20px; width: 100%; border-collapse: collapse; }
+  th { background-color: #003366; color: white; padding: 8px 12px; text-align: left; }
+  td { padding: 6px 12px; border-bottom: 1px solid #e0e0e0; }
+  tr:nth-child(even) td { background-color: #f8f9fa; }
+  blockquote { border-left: 4px solid #006699; background: #f0f7ff; padding: 10px 16px; margin: 12px 0; font-style: italic; color: #003366; }
+  footer, header { font-size: 13px; color: #999999; }
 ---
 
 <!-- _class: lead -->

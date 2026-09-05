@@ -28,8 +28,9 @@ It establishes the cross-reference mapping between academic weeks, design patter
 ---
 
 ## Deliverable Quality Checklist per Week
-For every entry `weeks/week-XX/`, the generation pipeline must produce:
-1. `slide.md`: 14-slide Marp deck adhering to `slides-template/base-marp.md`.
-2. `code/server.js`: Node.js/Express service highlighting that week's specific pattern.
-3. `code/openapi.yaml`: OpenAPI 3.0.3 contract fully describing schemas and status codes.
-4. `code/postman_collection.json`: Postman v2.1.0 collection with pre-written `pm.test` assertions.
+For every entry `weeks/week-XX/`, the 5-stage interactive learning pipeline (`soa-study-pipeline`) produces:
+1. `code/server.js` (and models/routes): Clean microservice with student-implemented core pattern logic.
+2. `code/openapi.yaml`: OpenAPI 3.0.3 contract adhering to the audited implementation.
+3. `code/postman_collection.json`: Postman v2.1.0 collection with test assertions, verified via Newman execution.
+4. `slide.md` & `slide.pdf`: Evidence-based presentation deck synthesized from approved theory, core code, and verification snapshots.
+

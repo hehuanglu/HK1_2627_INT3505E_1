@@ -2,42 +2,104 @@
 marp: true
 theme: default
 paginate: true
+size: 16:9
 header: "VNU-UET | Service-Oriented Architecture (SOA)"
-footer: "Department of Software Engineering"
+footer: "Khoa CNTT | Department of Software Engineering"
 style: |
   section {
-    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-    padding: 40px;
+    font-family: 'Segoe UI', Arial, Helvetica, sans-serif;
     font-size: 24px;
+    padding: 40px 50px;
+    color: #1a1a1a;
   }
   h1 {
     color: #003366;
+    font-size: 36px;
+    margin-bottom: 16px;
   }
   h2 {
     color: #006699;
+    font-size: 30px;
     border-bottom: 2px solid #e0e0e0;
     padding-bottom: 8px;
+    margin-bottom: 16px;
   }
-  footer {
-    font-size: 14px;
-    color: #888888;
-  }
-  header {
-    font-size: 14px;
+  h3 {
     color: #003366;
-    font-weight: bold;
+    font-size: 24px;
+    margin-bottom: 8px;
+  }
+  ul, ol {
+    font-size: 22px;
+    line-height: 1.6;
+  }
+  li {
+    margin-bottom: 6px;
+  }
+  code {
+    font-family: 'Consolas', 'JetBrains Mono', 'Courier New', monospace;
+    font-size: 18px;
+    background: #f3f3f3;
+    padding: 2px 6px;
+    border-radius: 3px;
+    color: #c7254e;
+  }
+  pre {
+    background: #1e1e1e;
+    color: #d4d4d4;
+    border-radius: 6px;
+    padding: 16px 20px;
+    font-size: 18px;
+    line-height: 1.5;
+  }
+  pre code {
+    background: transparent;
+    color: #d4d4d4;
+    padding: 0;
   }
   table {
     font-size: 20px;
+    width: 100%;
+    border-collapse: collapse;
   }
   th {
     background-color: #003366;
     color: white;
+    padding: 8px 12px;
+    text-align: left;
+  }
+  td {
+    padding: 6px 12px;
+    border-bottom: 1px solid #e0e0e0;
+  }
+  tr:nth-child(even) td {
+    background-color: #f8f9fa;
+  }
+  blockquote {
+    border-left: 4px solid #006699;
+    background: #f0f7ff;
+    padding: 10px 16px;
+    margin: 12px 0;
+    font-style: italic;
+    color: #003366;
+  }
+  footer {
+    font-size: 13px;
+    color: #999999;
+  }
+  header {
+    font-size: 13px;
+    color: #003366;
+    font-weight: bold;
   }
   .highlight {
     background-color: #fff3cd;
     padding: 2px 6px;
     border-radius: 4px;
+  }
+  .warning {
+    color: #cc0000;
+    font-weight: bold;
   }
 ---
 
@@ -47,11 +109,11 @@ style: |
 <!-- _footer: "" -->
 
 # [Topic Title: E.g., Cursor-Based Pagination]
-### Service-Oriented Architecture (SOA) - Week XX
-**Lecturer / Presenter:** [Presenter Name]  
-**Faculty of Information Technology - VNU-UET**
+### Service-Oriented Architecture (SOA) — Week XX
+**Lecturer / Presenter:** [Presenter Name]
+**Faculty of Information Technology — VNU-UET**
 
-<!-- Note: Welcome everyone to this week's seminar. Today we will explore the design pattern, why it matters in distributed systems, and practical implementation details. -->
+<!-- Note: Welcome everyone. Today we explore the design pattern, why it matters in distributed systems, and its practical implementation. -->
 
 ---
 
@@ -118,12 +180,13 @@ style: |
 // Express controller implementing the pattern
 router.get('/resources', async (req, res) => {
   const pageSize = parseInt(req.query.pageSize) || 10;
-  const cursor = req.query.pageToken ? decodeCursor(req.query.pageToken) : null;
+  const cursor = req.query.pageToken
+    ? decodeCursor(req.query.pageToken)
+    : null;
 
   const query = cursor ? { _id: { $gt: cursor } } : {};
   const items = await Resource.find(query).limit(pageSize + 1);
 
-  // Compute nextPageToken and return response
   const hasMore = items.length > pageSize;
   res.status(200).json({
     items: items.slice(0, pageSize),
@@ -140,9 +203,9 @@ router.get('/resources', async (req, res) => {
 
 | Evaluation Criteria | Naive Approach | Proposed Pattern |
 | :--- | :--- | :--- |
-| **Read Latency ($O(1)$ vs $O(N)$)** | Degrades with scale ($O(N)$) | Consistent index seek ($O(1)$) |
+| **Read Latency** | Degrades with scale `O(N)` | Consistent index seek `O(1)` |
 | **Resilience to Mutations** | Page drift & duplicate items | Stable snapshot consistency |
-| **Client Implementation Complexity** | Trivial (`page=1,2,3`) | Requires opaque token tracking |
+| **Client Complexity** | Trivial (`page=1,2,3`) | Requires opaque token tracking |
 | **Best Used When** | Static datasets, admin panels | Feeds, large datasets, public APIs |
 
 <!-- Note: Discuss the trade-offs honestly. No pattern is a silver bullet for every use case. -->

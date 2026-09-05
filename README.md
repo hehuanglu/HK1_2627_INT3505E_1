@@ -1,110 +1,145 @@
 # Học Phần Kiến Trúc Hướng Dịch Vụ (SOA) - VNU-UET
 
-Chào mừng bạn đến với kho lưu trữ tài liệu học tập, bài giảng và mã nguồn minh họa thực hành cho học phần **Kiến trúc hướng dịch vụ (Service-Oriented Architecture - SOA)** - Trường Đại học Công nghệ, Đại học Quốc gia Hà Nội (VNU-UET).
-
-Kho lưu trữ này được xây dựng theo phương pháp tiếp cận **API-First & Contract-First**, kết hợp lý thuyết thiết kế mẫu (*API Design Patterns* - JJ Geewax) và tư duy sản phẩm API (*Building an API Product* - Bruno Pedro).
+Kho lưu trữ được thiết kế theo triết lý **"Học thật để ứng dụng kiến thức vào thực tế"**: 
+- **Người học (Sinh viên) làm trung tâm**: Nắm giữ vai trò **Tư duy kiến trúc sâu (Deep Thinking)**, trực tiếp tranh luận phản biện và **tự tay lập trình phần logic hạt nhân** của từng tuần học để kiến thức không bị "trôi tuột".
+- **AI (LLM) đóng vai trò Cộng sự & Trợ giảng (Co-pilot & Mentor)**: Giải phóng người học khỏi các thiết lập kỹ thuật rườm rà (DB config, Express boilerplate), đưa ra phản biện sắc bén (Critical Thinking), audit mã nguồn, chạy kiểm thử tự động lấy minh chứng thực nghiệm và hỗ trợ soạn thảo slide bài giảng chuẩn mực.
+- **Nguồn chân lý định hướng**: Bài giảng trên lớp của thầy cô và các tài liệu chuẩn mực ngành (*API Design Patterns* - JJ Geewax, *Building an API Product* - Bruno Pedro).
 
 ---
 
-## 1. Cấu Trúc Kho Lưu Trữ
+## 1. Bản Đồ Đầu Vào & Đầu Ra (Inputs & Outputs Map)
 
-```text
+Mọi tài nguyên bạn cần cung cấp hoặc tìm kiếm đều được phân bổ rõ ràng tại hai khu vực chính:
+
+```
 SOA/
-├── README.md                 # Tài liệu hướng dẫn chung (Tiếng Việt)
-├── ARCHITECTURE.md           # Sơ đồ kiến trúc & luồng sinh dữ liệu tự động
-├── AGENTS.md                 # Quy tắc và hướng dẫn điều phối hệ thống Agent AI
-├── slides-template/          # Mẫu slide thuyết trình chuẩn Marp (UET Theme)
-├── weeks/                    # Nội dung chi tiết từng tuần học (Week 01 - Week 15)
-│   └── week-XX/
-│       ├── slide.md          # Slide thuyết trình dạng Markdown (hỗ trợ Marp)
-│       └── code/             # Dự án mã nguồn minh họa chạy được độc lập
-│           ├── openapi.yaml  # Bản hợp đồng đặc tả API chuẩn OpenAPI 3.0.3
-│           ├── server.js     # Backend Express.js + Mongoose demo pattern
-│           └── postman_collection.json # Bộ kịch bản kiểm thử Postman & Newman
-└── .agents/                  # Hệ thống tri thức và kỹ năng tự động hóa
-    ├── context/              # Cơ sở tri thức chuẩn (Syllabus, Patterns, Glossary)
-    └── skills/               # Các kỹ năng sinh bài giảng tự động
+├── .agents/context/              <=== [ĐẦU VÀO / INPUTS]: Nơi tra cứu tri thức nền tảng
+│   ├── syllabus.md               # Khung chương trình 15 tuần học chuẩn UET
+│   ├── api-design-patterns-notes.md  # Tổng hợp mẫu thiết kế API (JJ Geewax)
+│   ├── building-api-product-notes.md # Tư duy sản phẩm & DX (Bruno Pedro)
+│   ├── glossary-soa.md           # Từ điển thuật ngữ kiến trúc chuẩn Việt - Anh
+│   └── tooling-notes.md          # Quy chuẩn công cụ (OpenAPI, Postman, Node/Mongo)
+│
+└── weeks/week-XX/                <=== [ĐẦU RA / OUTPUTS]: Sản phẩm hoàn thiện của từng tuần
+    ├── slide.md                  # Bản thảo slide Marp (nội dung thực chất, minh chứng thực nghiệm)
+    ├── slide.pdf                 # File PDF chính thức để thuyết trình hoặc nộp bài
+    └── code/                     # Dự án mã nguồn microservice mẫu của tuần
+        ├── package.json          # Danh sách thư viện tối giản
+        ├── server.js             # Máy chủ Express & định tuyến
+        ├── models/               # Schema Mongoose thể hiện tài nguyên dữ liệu
+        ├── openapi.yaml          # Bản đặc tả hợp đồng dịch vụ chuẩn OpenAPI 3.0.3
+        ├── postman_collection.json # Bộ test kịch bản Postman v2.1.0 (kèm script pm.test)
+        └── README.md             # Hướng dẫn chạy nhanh service tại local
 ```
 
 ---
 
-## 2. Yêu Cầu Môi Trường Cài Đặt
+## 2. Quy Trình Học Tập 5 Chặng (Bạn & AI Phối Hợp Như Thế Nào?)
 
-Để chạy thử các dự án mẫu và xuất slide bài giảng, máy tính của bạn cần cài đặt sẵn:
+Mỗi tuần học (`week-01` đến `week-15`) được thực hiện theo chu trình 5 chặng khép kín có **Logic Gates (Điểm dừng phê duyệt)**:
 
-1. **Node.js**: Phiên bản LTS `>= 18.x` ([Tải tại đây](https://nodejs.org/)).
-2. **MongoDB**: Cài đặt MongoDB Community cục bộ hoặc chạy qua Docker:
-   ```bash
-   docker run -d -p 27017:27017 --name mongo-soa mongo:latest
-   ```
-3. **Newman CLI** (Công cụ chạy kiểm thử Postman tự động qua dòng lệnh):
-   ```bash
-   npm install -g newman
-   ```
-4. **Marp CLI** (Công cụ chuyển đổi slide Markdown sang PDF/HTML/PPTX):
-   ```bash
-   npm install -g @marp-team/marp-cli
-   ```
+```mermaid
+flowchart TD
+    S1["Chặng 1: SÀNG LỌC KIẾN THỨC\n(course-digest)"] --> G1{{"🛑 Gate 1: Bạn duyệt tri thức & kịch bản"}}
+    G1 --> S2["Chặng 2: IMPLEMENT HẠT NHÂN\n(api-code-scaffold)"] --> G2{{"🛑 Gate 2: Bạn tự tay code xong TODOs"}}
+    G2 --> S3["Chặng 3: AUDIT MÃ NGUỒN\n(Architectural Review)"] --> G3{{"🛑 Gate 3: Đồng thuận bản code tối ưu"}}
+    G3 --> S4["Chặng 4: NGHIỆM THU SNAPSHOT\n(openapi + postman)"] --> G4{{"🛑 Gate 4: Nghiệm thu kết quả test"}}
+    G4 --> S5["Chặng 5: THIẾT KẾ SLIDE\n(weekly-slide-outline)"] --> G5{{"🛑 Gate 5: Duyệt kết luận -> Xuất PDF"}}
+```
+
+### Chi tiết phân vai từng chặng:
+
+| Chặng | Bạn (Người học) cần làm gì? | AI (LLM) hỗ trợ việc gì? | Điểm dừng phê duyệt (Logic Gate) |
+| :--- | :--- | :--- | :--- |
+| **Chặng 1: Sàng lọc** | Đưa ghi chú bài giảng trên lớp; chọn 1 kịch bản nghiệp vụ thực tế (hoặc đề xuất bài toán riêng). | Đọc tài liệu chuẩn, trích xuất vấn đề hệ thống, nguyên lý pattern, tư duy DX và gợi ý 2-3 kịch bản thực tế. | **Gate 1**: Bạn xác nhận tri thức gốc đã đúng trọng tâm và chốt kịch bản. |
+| **Chặng 2: Implement** | Tranh luận kiến trúc cho tới khi thật sự hiểu; **mở code editor tự tay viết logic hạt nhân vào các khối `TODO`**. | Giải thích luồng dữ liệu; đặt câu hỏi phản biện; dựng sẵn khung boilerplate sạch sẽ (server, DB wiring, model, route stubs). | **Gate 2**: Bạn hoàn thành các khối `TODO` và báo cho AI. |
+| **Chặng 3: Audit** | Đọc phản biện của AI; tiếp thu lý do tối ưu về mặt kiến trúc; thống nhất mã nguồn cuối cùng. | Đọc code gốc bạn vừa viết; review theo 4 tiêu chí (Pattern, mã lỗi REST, chống race condition, DX); đề xuất bản vá tối ưu. | **Gate 3**: Hai bên chốt mã nguồn đạt chuẩn kiến trúc sạch. |
+| **Chặng 4: Nghiệm thu** | Quan sát kết quả test tự động; xác nhận các phản hồi API đúng như mong đợi thiết kế. | Soạn `openapi.yaml` (OAS 3.0.3); tạo `postman_collection.json`; chạy tự động test (Newman) và **chụp Snapshot logs, payload thực tế**. | **Gate 4**: Bạn nghiệm thu bộ bằng chứng thực nghiệm tin cậy. |
+| **Chặng 5: Slide** | Đọc bản thảo `slide.md`; duyệt danh sách **Kết luận cốt lõi & Khuyến nghị (Core Takeaways)**; xuất file PDF. | Soạn slide Marp đúc kết từ Chặng 1, 3 và 4 (linh hoạt trang, bỏ slide rác, chèn snapshot thực tế); biên dịch ra `slide.pdf`. | **Gate 5**: Bạn duyệt nội dung -> Xuất bản phẩm PDF chính thức. |
 
 ---
 
-## 3. Hướng Dẫn Sử Dụng Theo Tuần Học
+## 3. Hướng Dẫn Bắt Đầu Nhanh (Quickstart Guide)
 
-### Chạy mã nguồn demo một tuần (Ví dụ: `week-01`):
+### Bước 1: Kích hoạt buổi học cùng AI
+Khi bắt đầu một tuần học mới (ví dụ Tuần 2), bạn chỉ cần gửi yêu cầu vào khung chat:
+> *"Bắt đầu học Tuần 2: Resource-Oriented Architecture & Standard Methods. Nội dung thầy trên lớp nhấn mạnh vào phương thức Update và List."*
+
+Hệ thống sẽ kích hoạt Master Skill `soa-study-pipeline` và khởi động từ **Chặng 1**.
+
+---
+
+### Bước 2: Tự tay lập trình (Chặng 2)
+Sau khi chốt kịch bản, AI sẽ tạo thư mục `weeks/week-XX/code/` với đầy đủ khung sườn. Bạn chỉ cần:
+1. Mở tệp tin chứa pattern (ví dụ: `weeks/week-02/code/controllers/...` hoặc `middlewares/...`).
+2. Tìm các khối chú thích đánh dấu:
+   ```javascript
+   // ============================================================================
+   // TODO [HỌC VIÊN CÀI ĐẶT HẠT NHÂN]: Cài đặt logic xử lý tại đây...
+   // ============================================================================
+   ```
+3. Tự tay viết mã nguồn xử lý thuật toán cốt lõi.
+
+---
+
+### Bước 3: Chạy thử và kiểm thử tại máy cục bộ
+
+**1. Khởi động dịch vụ:**
 ```bash
-# 1. Di chuyển vào thư mục code của tuần
-cd weeks/week-01/code
-
-# 2. Cài đặt các gói phụ thuộc
+cd weeks/week-XX/code
 npm install
-
-# 3. Khởi chạy máy chủ API
 npm start
-# Server sẽ lắng nghe tại http://localhost:3000
+# Dịch vụ sẽ chạy tại http://localhost:3000
 ```
 
-### Chạy kiểm thử tự động với Newman:
-Trong khi máy chủ `server.js` đang chạy, mở terminal mới và thực thi:
+**2. Chạy kiểm thử tự động với Newman:**
+Trong khi máy chủ đang chạy, mở một cửa sổ terminal mới và thực thi:
 ```bash
-newman run weeks/week-01/code/postman_collection.json
+# Cài đặt newman nếu chưa có: npm install -g newman
+newman run weeks/week-XX/code/postman_collection.json
 ```
-Kết quả kiểm thử từng kịch bản sẽ hiển thị trực tiếp trên terminal với trạng thái `PASS/FAIL`.
+Màn hình sẽ hiển thị kết quả kiểm thử xanh lá (`PASS`) cho từng kịch bản nghiệp vụ.
 
-### Xuất Slide bài giảng sang định dạng HTML / PDF:
+---
+
+### Bước 4: Biên dịch Slide bài giảng sang PDF (Chặng 5)
+Sau khi bạn duyệt bản thảo `slide.md` ở Chặng 5, bạn (hoặc AI) có thể xuất file PDF chất lượng cao thông qua lệnh:
 ```bash
-# Xuất sang file trình chiếu HTML tương tác
-marp weeks/week-01/slide.md -o weeks/week-01/slide.html
-
-# Xuất sang file PDF để in ấn hoặc nộp bài
-marp --pdf weeks/week-01/slide.md -o weeks/week-01/slide.pdf
+npx @marp-team/marp-cli --no-stdin weeks/week-XX/slide.md --pdf --allow-local-files -o weeks/week-XX/slide.pdf
 ```
 
 ---
 
-## 4. Danh Sách Chủ Đề Bài Giảng (15 Tuần)
+## 4. Lịch Trình 15 Tuần Học (Chưa có nguồn học liệu chuẩn)
 
-Chi tiết khung chương trình và tài liệu tham khảo được cập nhật liên tục tại [`.agents/context/syllabus.md`](file:///Users/hahoangloc/Working/UET/SOA/.agents/context/syllabus.md).
+Chi tiết tài liệu và pattern tương ứng của từng tuần được quy định tại [`.agents/context/syllabus.md`](file:///Users/hahoangloc/Working/UET/SOA/.agents/context/syllabus.md):
 
-* **Tuần 01**: Giới thiệu Kiến trúc SOA, Microservices & Tư duy API-as-a-Product.
-* **Tuần 02**: Resource-Oriented Design & Standard Methods (List, Get, Create, Update, Delete).
-* **Tuần 03**: Resource Hierarchy, Scoping & Singleton Sub-resources.
-* **Tuần 04**: Partial Updates & Field Masks trong RESTful APIs.
-* **Tuần 05**: Custom Methods & State Transitions.
-* **Tuần 06**: Long-Running Operations (LRO) & Asynchronous Jobs.
-* **Tuần 07**: Rerunnable Jobs & Idempotency Key Pattern.
-* **Tuần 08**: Phân trang nâng cao: Cursor/Token-based vs. Offset/Limit.
-* **Tuần 09**: Lọc dữ liệu có cấu trúc (Filtering & Structured Search).
-* **Tuần 10**: Soft Deletion, Thùng rác & Phục hồi tài nguyên (Undelete).
-* **Tuần 11**: Association Resources & Mô hình hóa quan hệ Many-to-Many.
-* **Tuần 12**: Request Validation, Dry-Run & Safe Mutations.
-* **Tuần 13**: API Versioning, Tương thích ngược & Chiến lược Deprecation.
-* **Tuần 14**: API Gateway, Rate Limiting & Bảo mật phân tầng (OAuth2 / JWT).
-* **Tuần 15**: Giám sát hiệu năng (Observability), Tracing phân tán & Tổng kết học phần.
+| Tuần | Chủ Đề Chính | Trọng Tâm Pattern (JJ Geewax) & Tư Duy Sản Phẩm (Bruno Pedro) |
+| :--- | :--- | :--- |
+| **Tuần 01** | Foundations of SOA & API-as-a-Product | Quy ước đặt tên tài nguyên & Kim tự tháp nhu cầu DX |
+| **Tuần 02** | Resource-Oriented Architecture & Standard Methods | Các phương thức chuẩn (List, Get, Create, Update, Delete) & Spec-First |
+| **Tuần 03** | Resource Hierarchy & Singleton Sub-resources | Phân cấp tài nguyên & Mô hình hóa phạm vi Domain |
+| **Tuần 04** | Partial Updates & Field Masks | Cập nhật một phần với FieldMask & Tối ưu hóa băng thông truyền tải |
+| **Tuần 05** | Custom Methods & State Transitions | Các hành động RPC phi CRUD & Mô hình hóa luồng trạng thái |
+| **Tuần 06** | Long-Running Operations (LRO) & Async Jobs | Xử lý tác vụ độ trễ cao & Cơ chế Polling / Callback |
+| **Tuần 07** | Rerunnable Jobs & Idempotency Key Pattern | Chống trùng lặp giao dịch & Khả năng chịu lỗi trong hệ phân tán |
+| **Tuần 08** | Pagination: Cursor/Token-Based vs. Offset/Limit | Phân trang con trỏ hiệu năng cao cho dữ liệu lớn |
+| **Tuần 09** | Filtering, Searching & Structured Querying | Ngôn ngữ truy vấn có cấu trúc & Thiết kế giao diện tìm kiếm |
+| **Tuần 10** | Soft Deletion & Undelete Patterns | Xóa mềm, thùng rác & Quản trị dữ liệu / Audit Trails |
+| **Tuần 11** | Association Resources & Many-to-Many | Mô hình hóa quan hệ nhiều-nhiều trong RESTful API |
+| **Tuần 12** | Request Validation, Dry-Run & Safe Mutations | Thao tác chạy thử (Dry-run) & Ngăn chặn đột biến dữ liệu lỗi |
+| **Tuần 13** | API Versioning, Evolution & Deprecation | Quản trị vòng đời API, Semantic Versioning & Sunset Headers |
+| **Tuần 14** | API Gateway, Rate Limiting & Security | Định tuyến Gateway, bóp nghẽn băng thông & Bảo mật OAuth2/JWT |
+| **Tuần 15** | Distributed Observability & Retrospective | Tracing phân tán, Metric giám sát & Tổng kết học phần |
 
 ---
 
-## 5. Quy Chuẩn Đóng Góp (Contribution Guidelines)
+## 5. Yêu Cầu Kỹ Thuật (Prerequisites)
 
-- Mọi endpoint mẫu bắt buộc phải có tài liệu đặc tả tương ứng trong `openapi.yaml` (chuẩn 3.0.3).
-- Mã nguồn minh họa tuân thủ nguyên tắc tối giản (**KISS** - Keep It Simple, Stupid), tập trung làm nổi bật pattern thiết kế và có chú thích bằng tiếng Việt.
-- Tuân thủ quy trình nhánh tính năng: `git checkout -b feature/week-XX-topic`.
+- **Node.js**: Phiên bản LTS `>= 18.x` ([Tải tại nodejs.org](https://nodejs.org/)).
+- **MongoDB**: Máy chủ MongoDB chạy tại local (`mongodb://localhost:27017`) hoặc container Docker:
+  ```bash
+  docker run -d -p 27017:27017 --name mongo-soa mongo:latest
+  ```
+- **Newman CLI**: `npm install -g newman` (phục vụ chạy test tự động dòng lệnh).
+- **Marp CLI**: `npm install -g @marp-team/marp-cli` (phục vụ xuất slide PDF).

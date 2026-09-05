@@ -1,48 +1,106 @@
 ---
 name: weekly-slide-outline
-description: Tạo dàn ý và nội dung slide bài giảng tuần theo cấu trúc chuẩn sư phạm (Khái niệm -> Vấn đề -> Ví dụ -> So sánh) và lưu vào weeks/week-XX/slide.md.
+description: Chặng 5 của quy trình học tập - Soạn thảo slide bài giảng bằng Marp dựa trên tri thức Chặng 1, mã nguồn Chặng 3 và minh chứng Chặng 4; có điểm dừng (Logic Gate 5) để sinh viên duyệt kết luận & khuyến nghị trước khi xuất PDF.
 ---
 
-# Kỹ Năng: Weekly Slide Outline (Sinh Dàn Ý & Nội Dung Slide Thuyết Trình)
+# Kỹ Năng: Weekly Slide Outline (Chặng 5 - Thiết Kế Slide Bài Giảng Minh Chứng)
 
 ## 1. Tên Kỹ Năng
-**weekly-slide-outline** (Sinh slide thuyết trình hàng tuần)
+**weekly-slide-outline** (Thiết kế slide bài giảng đúc kết từ lý thuyết và thực nghiệm)
 
 ## 2. Khi Nào Kích Hoạt
-Kích hoạt kỹ năng này khi:
-- Đã có bản tổng hợp tri thức từ kỹ năng `course-digest`.
-- Sinh viên yêu cầu soạn slide thuyết trình cho một tuần cụ thể (`week-XX`).
-- Cần cấu trúc lại bài nói trên lớp cho sinh viên để thuyết phục giảng viên và các bạn học về lý do chọn giải pháp/pattern thiết kế.
+- Kích hoạt trong **Chặng 5 (Chặng cuối)** của Master Skill `soa-study-pipeline`.
+- Kích hoạt sau khi đã có đầy đủ:
+  - Tri thức gốc và kịch bản nghiệp vụ đã duyệt từ Chặng 1 (`course-digest`).
+  - Mã nguồn hạt nhân đã audit và tối ưu từ Chặng 3.
+  - Hợp đồng `openapi.yaml`, bộ test `postman_collection.json` và các Snapshot minh chứng thực nghiệm từ Chặng 4.
+- Cần xuất bản phẩm bài giảng hoàn chỉnh (`slide.md` và `slide.pdf`) để thuyết trình hoặc nộp bài tập lớn/tuần.
 
 ## 3. Input Mong Đợi
-- **Bản tổng hợp tri thức tuần**: Output từ kỹ năng `course-digest`.
-- **Số thứ tự tuần**: `week-XX` (ví dụ `weeks/week-01`, `weeks/week-02`).
-- **Thời lượng dự kiến hoặc số slide mục tiêu**: Thông thường từ 10 đến 15 slide cho một buổi seminar 15-20 phút.
+- **Tri thức Chặng 1**: Vấn đề hệ thống, cơ chế Pattern, góc nhìn sản phẩm (Bruno Pedro).
+- **Mã nguồn Chặng 3**: Đoạn code hạt nhân đã hoàn thiện (trực quan, ngắn gọn, súc tích).
+- **Minh chứng Chặng 4**: Các snapshot Request/Response JSON, console logs, bảng kết quả test Newman.
+- **Số thứ tự tuần**: `week-XX`.
 
 ## 4. Output Mong Đợi
-File markdown hoàn chỉnh tại đường dẫn: `weeks/week-XX/slide.md` (hỗ trợ định dạng phân tách slide Marp bằng dấu `---`).
-Nội dung slide phải đảm bảo đủ 4 trục trụ cột:
-1. **Khái niệm (Concept)**: Định nghĩa tường minh, ngôn ngữ chuẩn mực, trích dẫn chuẩn pattern từ JJ Geewax hoặc Bruno Pedro.
-2. **Vấn đề nó giải quyết (Problem Statement)**: Sự đau khổ (pain point) của hệ thống nếu không dùng pattern này (lỗi xung đột, timeout, rò rỉ dữ liệu, trải nghiệm lập trình viên tồi tệ).
-3. **Ví dụ minh họa (Concrete Example)**: Kịch bản đời thực (E-commerce, Banking, Ride-hailing), kèm flow request/response hoặc diagram đơn giản.
-4. **So sánh với pattern liên quan (Trade-offs & Alternatives)**: Bảng đối chiếu ưu/nhược điểm so với giải pháp ngây thơ (naive approach) hoặc pattern tương đương.
+- `weeks/week-XX/slide.md` — Bản thảo Marp Markdown tập trung vào luận điểm và minh chứng.
+- `weeks/week-XX/slide.pdf` — **File PDF xuất bản chính thức** qua Marp CLI sau khi sinh viên đã duyệt.
 
-## 5. Các Bước Xử Lý
-1. **Xác định đường dẫn đích**: Kiểm tra và tạo thư mục `weeks/week-XX/` nếu chưa có. Đích đến là `weeks/week-XX/slide.md`.
-2. **Khung cấu trúc Slide (Slide Deck Structure)**:
-   - **Slide 1**: Trang bìa (Tên chủ đề tuần, Mã môn học SOA - UET, Người trình bày).
-   - **Slide 2**: Mục tiêu bài học & Agenda (Tổng quan nội dung sẽ đi qua).
-   - **Slide 3 - 4 (Khái niệm)**: Bản chất kỹ thuật của Pattern / Chủ đề. Nêu rõ thuật ngữ tiếng Anh và tiếng Việt.
-   - **Slide 5 - 6 (Vấn đề cần giải quyết)**: Các lỗi sai thường gặp khi thiết kế "ngây thơ", rủi ro về hiệu năng, bảo mật hoặc tính mở rộng.
-   - **Slide 7 - 9 (Giải pháp & Thiết kế chi tiết)**: Kiến trúc giải pháp theo chuẩn JJ Geewax (Cấu trúc URI, HTTP Verbs, Header, Request/Response payload, Mã trạng thái HTTP).
-   - **Slide 10 - 11 (Ví dụ thực tế)**: Kịch bản áp dụng với dữ liệu cụ thể (kết nối trực tiếp tới phần demo code sắp tới).
-   - **Slide 12 (So sánh & Trade-offs)**: Bảng so sánh (Ưu điểm, Nhược điểm, Khi nào nên dùng và Khi nào KHÔNG nên dùng).
-   - **Slide 13 (Góc nhìn API-as-a-Product)**: Tác động của pattern này tới Developer Experience (DX) theo Bruno Pedro.
-   - **Slide 14**: Tổng kết & Câu hỏi thảo luận (Q&A cho cả lớp).
-3. **Chèn Speaker Notes**: Trong mỗi slide markdown, thêm phần ghi chú người thuyết trình (`<!-- Note: ... -->`) giải thích những ý sinh viên cần nói bằng lời trên lớp mà không đưa hết chữ lên slide.
-4. **Ghi file**: Dùng công cụ ghi file vào `weeks/week-XX/slide.md`.
+---
 
-## 6. Nguồn Dữ Liệu Cần Đọc
-- [`.agents/context/api-design-patterns-notes.md`](file:///Users/hahoangloc/Working/UET/SOA/.agents/context/api-design-patterns-notes.md)
-- [`.agents/context/building-api-product-notes.md`](file:///Users/hahoangloc/Working/UET/SOA/.agents/context/building-api-product-notes.md)
-- [`.agents/context/glossary-soa.md`](file:///Users/hahoangloc/Working/UET/SOA/.agents/context/glossary-soa.md)
+## 5. Quy Chuẩn Nội Dung & Bố Cục Slide
+
+### A. Triết Lý Nội Dung: "Substance Over Fluff" (Thực Chất & Không Slide Rác)
+1. **Tuyệt đối hạn chế slide thừa**:
+   - **KHÔNG** làm các slide giới thiệu đơn vị tổ chức, khoa viện, chức danh rườm rà.
+   - Đi thẳng vào bài toán kỹ thuật ngay từ slide đầu tiên.
+2. **Linh hoạt số lượng trang (Không ép cứng 14 trang)**:
+   - Độ dài tùy biến theo chiều sâu chủ đề (thường dao động từ **8 đến 14 trang**).
+   - Nếu chủ đề ngắn gọn: 8 - 10 trang cô đọng, sắc bén.
+   - Nếu chủ đề phức tạp (nhiều state transition / edge cases): 12 - 14 trang chi tiết.
+3. **Cấu trúc khung xương bài giảng thực chiến**:
+   - **Slide 1**: Tiêu đề chủ đề & Bài toán nghiệp vụ cụ thể của tuần.
+   - **Slide 2-3**: Vấn đề hệ thống (Failure modes, thắt nút cổ chai, rủi ro nếu thiết kế ngây thơ).
+   - **Slide 4-5**: Cơ chế giải pháp (Pattern Architecture, luồng dữ liệu, phân vai các thành phần).
+   - **Slide 6-7**: Mã nguồn hạt nhân (Trích xuất các khối logic then chốt đã lập trình ở Chặng 3).
+   - **Slide 8-9**: **Minh chứng thực nghiệm (Live Snapshots)**:
+     - Request Header / Body và Response thực tế từ Chặng 4.
+     - Log terminal minh họa quá trình xử lý ngầm.
+     - Kết quả chạy kiểm thử tự động (Newman Pass).
+   - **Slide 10-11**: Ma trận đánh đổi & So sánh kiến trúc (Trade-offs, ví dụ Cursor vs Offset, Soft vs Hard Delete).
+   - **Slide cuối**: **Kết luận cốt lõi & Khuyến nghị thực tế (Core Takeaways & Suggestions)**.
+
+---
+
+### B. Quy Chuẩn Trình Bày (Typography & Visual Standards)
+- **Frontmatter Marp**:
+  ```markdown
+  ---
+  marp: true
+  theme: default
+  paginate: true
+  size: 16:9
+  style: |
+    section {
+      padding: 40px 50px;
+      font-family: 'Segoe UI', Arial, sans-serif;
+      font-size: 24px;
+      color: #333;
+    }
+    h1 { color: #003366; font-size: 36px; margin-bottom: 20px; }
+    h2 { color: #006699; font-size: 28px; border-bottom: 2px solid #006699; padding-bottom: 8px; }
+    code { font-family: 'Consolas', 'JetBrains Mono', monospace; font-size: 18px; }
+    pre { background: #1e1e1e !important; color: #d4d4d4; padding: 15px; border-radius: 6px; }
+    table { width: 100%; border-collapse: collapse; font-size: 20px; }
+    th { background: #003366; color: white; padding: 10px; }
+    td { padding: 10px; border: 1px solid #ddd; }
+    footer { font-size: 13px; color: #888; }
+  ---
+  ```
+- **Mật độ thông tin**:
+  - Tối đa 5 bullets/slide, mỗi bullet không quá 16 âm tiết.
+  - Tối đa 1 code block hoặc 1 snapshot/slide (≤15 dòng).
+  - Có presenter speaker notes (`<!-- Note: ... -->`) ở mỗi slide để sinh viên nắm lời bình khi thuyết trình.
+
+---
+
+## 6. Quy Trình Thực Hiện & Logic Gate 5
+
+1. **Tổng hợp dữ liệu**:
+   - LLM tập hợp kiến thức lý thuyết đã duyệt ở Chặng 1.
+   - LLM trích xuất đoạn code trọng tâm từ Chặng 3.
+   - LLM đưa các snapshot minh chứng thực tế từ Chặng 4 vào các slide minh họa.
+2. **Soạn thảo bản thảo `slide.md`**:
+   - Ghi file bản thảo ra `weeks/week-XX/slide.md`.
+3. **Trích xuất Core Conclusions & Recommendations**:
+   - LLM tóm lược ngắn gọn danh sách các kết luận cốt lõi và khuyến nghị rút ra từ tuần học để hiển thị trực tiếp cho sinh viên đọc.
+4. **Logic Gate 5 (Bắt buộc dừng để Sinh viên phê duyệt)**:
+   - LLM dừng lại và hỏi:
+     > *"Bạn đã xem qua bản thảo slide và các kết luận cốt lõi (Core Takeaways) chưa? Bạn có muốn điều chỉnh câu chữ, bổ sung ghi chú thuyết trình, hay thay đổi thứ tự trang nào không?"*
+   - Sinh viên xem xét, phản hồi chỉnh sửa hoặc gõ xác nhận đồng ý.
+5. **Xuất bản PDF (Final Build)**:
+   - Sau khi sinh viên phê duyệt, LLM kích hoạt lệnh Marp CLI:
+     ```bash
+     npx @marp-team/marp-cli --no-stdin weeks/week-XX/slide.md --pdf --allow-local-files -o weeks/week-XX/slide.pdf
+     ```
+   - Xác nhận file `slide.pdf` đã được tạo thành công.
