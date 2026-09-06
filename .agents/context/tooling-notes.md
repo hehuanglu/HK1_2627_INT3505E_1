@@ -169,3 +169,53 @@ git commit -m "feat(week-02): implement cursor-based pagination pattern"
 # 3. Đẩy lên GitHub và tạo Pull Request để phản biện kiến trúc
 git push origin feature/pagination-token
 ```
+
+---
+
+## 5. Docker & Containerization
+
+### Tổng quan & Bản chất
+- **Docker**: Nền tảng ảo hóa mức hệ điều hành (Containerization) cho phép đóng gói toàn bộ mã nguồn, runtime Node.js, thư viện phụ thuộc và cấu hình môi trường vào một Container Image độc lập và bất biến.
+- Đảm bảo tính nhất quán tuyệt đối theo nguyên lý: *"Chạy được ở local thì chắc chắn chạy được ở staging/production"*.
+
+### Vai trò trong Vận hành Dịch vụ (Service Operation)
+- Chuẩn hóa môi trường triển khai cho microservice trong Tuần 10 (Service Operation) và Tuần 13 (Capstone Project).
+- Tích hợp với Docker Compose để khởi chạy đồng thời cụm dịch vụ: Express API Service + MongoDB Server + Reverse Proxy / Gateway.
+
+### Mẫu `Dockerfile` Chuẩn Cho Node.js API Service
+```dockerfile
+# Sử dụng Node.js LTS Alpine tối ưu kích thước
+FROM node:18-alpine
+
+WORKDIR /usr/src/app
+
+# Tận dụng Docker layer caching cho dependencies
+COPY package*.json ./
+RUN npm ci --only=production
+
+# Sao chép toàn bộ mã nguồn
+COPY . .
+
+# Khai báo cổng phơi bày của service
+EXPOSE 3000
+
+# Thiết lập biến môi trường mặc định
+ENV NODE_ENV=production
+
+# Lệnh khởi chạy tiến trình
+CMD ["node", "server.js"]
+```
+
+---
+
+## 6. Ma Trận Phân Bổ Công Cụ Theo Lộ Trình Chuẩn 13 Tuần
+
+| Bộ Công Cụ | Các Tuần Trọng Tâm | Vai Trò & Mục Đích Kỹ Thuật |
+| :--- | :--- | :--- |
+| **OpenAPI / Swagger** | Week 04, Week 07, Week 13 | Thiết kế đặc tả hợp đồng (Design-First), sinh tài liệu tương tác Swagger UI, Contract Validation |
+| **Node.js, Express & Mongoose** | Week 02, Week 03, Week 05, Week 06, Week 07, Week 11, Week 13 | Hiện thực hóa backend từ spec, mô hình hóa dữ liệu (Mongoose Schemas), bảo vệ bằng JWT middleware, cài đặt Design Patterns |
+| **Postman & Newman CLI** | Week 08, Week 11, Week 13 (và xác thực tại Mọi tuần) | Xây dựng test suite tự động (Happy & Negative path), đo lường độ trễ, sinh báo cáo CLI làm minh chứng snapshot |
+| **Git, GitHub & CI/CD** | Week 09, Week 10, Week 13 | Quản lý phiên bản hợp đồng không gây đứt gãy, tự động hóa linting và regression testing bằng GitHub Actions |
+| **Docker & Docker Compose** | Week 10, Week 13 | Đóng gói container, thiết lập health checks (`/healthz`), giả lập môi trường production nhiều thành phần |
+| **Marp CLI** | Tuần 01 đến Tuần 13 | Biên dịch bài giảng Marp Markdown sang slide PDF học liệu chuẩn UET |
+

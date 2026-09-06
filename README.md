@@ -14,7 +14,7 @@ Mọi tài nguyên bạn cần cung cấp hoặc tìm kiếm đều được ph�
 ```
 SOA/
 ├── .agents/context/              <=== [ĐẦU VÀO / INPUTS]: Nơi tra cứu tri thức nền tảng
-│   ├── syllabus.md               # Khung chương trình 15 tuần học chuẩn UET
+│   ├── syllabus.md               # Khung chương trình 13 tuần học chuẩn UET
 │   ├── api-design-patterns-notes.md  # Tổng hợp mẫu thiết kế API (JJ Geewax)
 │   ├── building-api-product-notes.md # Tư duy sản phẩm & DX (Bruno Pedro)
 │   ├── glossary-soa.md           # Từ điển thuật ngữ kiến trúc chuẩn Việt - Anh
@@ -36,7 +36,7 @@ SOA/
 
 ## 2. Quy Trình Học Tập 5 Chặng (Bạn & AI Phối Hợp Như Thế Nào?)
 
-Mỗi tuần học (`week-01` đến `week-15`) được thực hiện theo chu trình 5 chặng khép kín có **Logic Gates (Điểm dừng phê duyệt)**:
+Mỗi tuần học (`week-01` đến `week-13`) được thực hiện theo chu trình 5 chặng khép kín có **Logic Gates (Điểm dừng phê duyệt)**:
 
 ```mermaid
 flowchart TD
@@ -110,27 +110,25 @@ npx @marp-team/marp-cli --no-stdin weeks/week-XX/slide.md --pdf --allow-local-fi
 
 ---
 
-## 4. Lịch Trình 15 Tuần Học (Chưa có nguồn học liệu chuẩn)
+## 4. Lịch Trình Chuẩn 13 Tuần Học
 
-Chi tiết tài liệu và pattern tương ứng của từng tuần được quy định tại [`.agents/context/syllabus.md`](file:///Users/hahoangloc/Working/UET/SOA/.agents/context/syllabus.md):
+Chi tiết mục tiêu, bài tập thực hành và tài liệu tham chiếu của từng tuần được quy định tại [`.agents/context/syllabus.md`](file:///Users/hahoangloc/Working/UET/SOA/.agents/context/syllabus.md):
 
-| Tuần | Chủ Đề Chính | Trọng Tâm Pattern (JJ Geewax) & Tư Duy Sản Phẩm (Bruno Pedro) |
-| :--- | :--- | :--- |
-| **Tuần 01** | Foundations of SOA & API-as-a-Product | Quy ước đặt tên tài nguyên & Kim tự tháp nhu cầu DX |
-| **Tuần 02** | Resource-Oriented Architecture & Standard Methods | Các phương thức chuẩn (List, Get, Create, Update, Delete) & Spec-First |
-| **Tuần 03** | Resource Hierarchy & Singleton Sub-resources | Phân cấp tài nguyên & Mô hình hóa phạm vi Domain |
-| **Tuần 04** | Partial Updates & Field Masks | Cập nhật một phần với FieldMask & Tối ưu hóa băng thông truyền tải |
-| **Tuần 05** | Custom Methods & State Transitions | Các hành động RPC phi CRUD & Mô hình hóa luồng trạng thái |
-| **Tuần 06** | Long-Running Operations (LRO) & Async Jobs | Xử lý tác vụ độ trễ cao & Cơ chế Polling / Callback |
-| **Tuần 07** | Rerunnable Jobs & Idempotency Key Pattern | Chống trùng lặp giao dịch & Khả năng chịu lỗi trong hệ phân tán |
-| **Tuần 08** | Pagination: Cursor/Token-Based vs. Offset/Limit | Phân trang con trỏ hiệu năng cao cho dữ liệu lớn |
-| **Tuần 09** | Filtering, Searching & Structured Querying | Ngôn ngữ truy vấn có cấu trúc & Thiết kế giao diện tìm kiếm |
-| **Tuần 10** | Soft Deletion & Undelete Patterns | Xóa mềm, thùng rác & Quản trị dữ liệu / Audit Trails |
-| **Tuần 11** | Association Resources & Many-to-Many | Mô hình hóa quan hệ nhiều-nhiều trong RESTful API |
-| **Tuần 12** | Request Validation, Dry-Run & Safe Mutations | Thao tác chạy thử (Dry-run) & Ngăn chặn đột biến dữ liệu lỗi |
-| **Tuần 13** | API Versioning, Evolution & Deprecation | Quản trị vòng đời API, Semantic Versioning & Sunset Headers |
-| **Tuần 14** | API Gateway, Rate Limiting & Security | Định tuyến Gateway, bóp nghẽn băng thông & Bảo mật OAuth2/JWT |
-| **Tuần 15** | Distributed Observability & Retrospective | Tracing phân tán, Metric giám sát & Tổng kết học phần |
+| Tuần | Nội Dung Chính | Mục Tiêu Sinh Viên Đạt Được | Trọng Tâm Kiến Trúc & Công Cụ |
+| :--- | :--- | :--- | :--- |
+| **Tuần 01** | Giới thiệu API, Web Services | Hiểu vai trò API trong hệ thống phần mềm | Phân biệt SOAP vs REST vs RPC; Tư duy API-as-a-Product & Tháp nhu cầu DX |
+| **Tuần 02** | REST & HTTP Fundamentals | Thiết kế request/response đúng chuẩn | 6 ràng buộc REST, Resource Naming (JJ Geewax Ch. 2), HTTP Semantics & Status Codes |
+| **Tuần 03** | Nguyên tắc thiết kế API | Xây dựng API nhất quán, dễ dùng | 5 phương thức chuẩn (CRUD - JJ Geewax Ch. 3), Chuẩn hóa lỗi RFC 7807, DX Usability |
+| **Tuần 04** | OpenAPI & Swagger | Tạo tài liệu API tự động | Phương pháp tiếp cận Spec-First / Design-First, OpenAPI Specification 3.0.3 & Swagger UI |
+| **Tuần 05** | Data Modeling & Resource Design | Thiết kế cấu trúc dữ liệu cho API | Phân cấp tài nguyên cha-con, Singleton Sub-resources, Association Resources (N-N) |
+| **Tuần 06** | Authentication & Authorization | Bảo mật API | Phân biệt AuthN vs AuthZ, Token mang quyền JWT, OAuth 2.0 & Phân quyền vai trò RBAC |
+| **Tuần 07** | Backend Implementation | Xây dựng backend từ spec | Ánh xạ Spec-to-Code, kiến trúc nhiều tầng Express + Mongoose & Contract Validation |
+| **Tuần 08** | API Testing | Kiểm thử tự động, hiệu năng | Kiểm thử tự động với Postman/Newman CLI (Happy & Negative Path), đo lường độ trễ |
+| **Tuần 09** | API Versioning | Quản lý thay đổi API | Semantic Versioning, Breaking vs Non-breaking changes, Header Deprecation & Sunset |
+| **Tuần 10** | Service Operation | Deploy, monitoring, bảo mật production | Đóng gói Docker Container, Health Check (`/healthz`), Observability (Logs, Metrics, Traces) & Rate Limiting |
+| **Tuần 11** | API Design Patterns | Áp dụng mẫu thiết kế cho các tình huống thực tế | Advanced Patterns: Idempotency Key, Long-Running Operations (LRO), FieldMask, Token Pagination, Soft Delete |
+| **Tuần 12** | API as a Product | Xem API là sản phẩm kinh doanh | Mô hình kinh doanh API (Monetization tiers), Developer Portal, TTFHW (< 5p) & Quản trị SLA/SLO |
+| **Tuần 13** | Dự án nhóm (Capstone) | Triển khai API hoàn chỉnh + quản lý vòng đời | Tích hợp trọn vẹn Design-First, Code, Auth, Test, CI/CD, Docker & bảo vệ đồ án trước hội đồng |
 
 ---
 

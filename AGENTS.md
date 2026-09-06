@@ -21,7 +21,7 @@ SOA/
 │   └── base-marp.md                # Reusable presentation theme & slide boilerplate
 ├── .agents/
 │   ├── context/                    # Static Knowledge Base (Cached Reference Materials)
-│   │   ├── syllabus.md             # 15-week standardized SOA curriculum schedule
+│   │   ├── syllabus.md             # 13-week standardized SOA curriculum schedule
 │   │   ├── api-design-patterns-notes.md  # Key patterns from JJ Geewax
 │   │   ├── building-api-product-notes.md # API Product & DX principles from Bruno Pedro
 │   │   ├── glossary-soa.md         # Bilingual Vietnamese-English architectural lexicon
@@ -34,7 +34,7 @@ SOA/
 │       ├── postman-collection/     # Stage 4: Postman v2.1.0 test suite, Newman runner & live snapshots
 │       └── weekly-slide-outline/   # Stage 5: Evidence-based slide synthesis (Marp Markdown -> PDF)
 └── weeks/
-    └── week-XX/                    # Weekly production artifacts (week-01 to week-15)
+    └── week-XX/                    # Weekly production artifacts (week-01 to week-13)
         ├── slide.md                # Draft & finalized Marp lecture deck (substance-focused)
         ├── slide.pdf               # Exported classroom presentation PDF
         └── code/                   # Functional code artifact

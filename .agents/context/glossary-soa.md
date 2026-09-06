@@ -36,6 +36,10 @@ Bảng chú giải thuật ngữ chuẩn mực phục vụ học phần **Kiến
 | **Xóa mềm** | Soft Deletion | Kỹ thuật đánh dấu cờ xóa (`isDeleted = true`) trên bản ghi cơ sở dữ liệu thay vì xóa vật lý, cho phép khôi phục dữ liệu (`undelete`) và lưu vết kiểm toán. |
 | **Tương thích ngược** | Backward Compatibility | Khả năng phiên bản API mới vẫn hoạt động hoàn hảo với các client được lập trình cho phiên bản API cũ mà không yêu cầu client phải sửa đổi code. |
 | **Thay đổi gây đứt gãy** | Breaking Change | Bất kỳ thay đổi nào trong hợp đồng API (xóa endpoint, đổi kiểu dữ liệu, bắt buộc thêm trường mới trong request) khiến client cũ gặp lỗi khi gọi đến. |
+| **Bản sửa đổi & Kiểm soát đồng thời** | Resource Revisions & Concurrency Control | Cơ chế sử dụng HTTP Header `ETag` kết hợp `If-Match` để kiểm soát khóa lạc quan (Optimistic Concurrency Control), chống xung đột cập nhật đè (Lost Update Problem) trong hệ thống phân tán. |
+| **Thao tác theo lô** | Batch Operations | Mẫu thiết kế gộp nhiều thao tác tạo/sửa/xóa nhiều bản ghi vào trong một request duy nhất, giảm thiểu số lượng kết nối mạng (tránh vấn đề N+1 network calls) và hỗ trợ giao dịch nguyên khối (Atomic Transaction). |
+| **Tham chiếu chéo** | Cross References | Kỹ thuật liên kết giữa các tài nguyên ở các collection hoặc microservices khác nhau bằng URI hoặc tên tài nguyên đầy đủ (`users/usr_123`) thay vì nhúng toàn bộ dữ liệu, chống over-fetching và lệch pha dữ liệu. |
+| **Tài nguyên đa hình** | Polymorphic Resources | Mẫu thiết kế cho phép một endpoint hoặc collection trả về các đối tượng có cấu trúc khác nhau dựa trên một trường mỏ neo phân biệt (`type`), đảm bảo an toàn kiểu dữ liệu với `oneOf`/`anyOf` trong OpenAPI. |
 
 ---
 
@@ -45,8 +49,29 @@ Bảng chú giải thuật ngữ chuẩn mực phục vụ học phần **Kiến
 | :--- | :--- | :--- |
 | **Tư duy API như sản phẩm** | API-as-a-Product | Coi API là một sản phẩm thương mại độc lập với đối tượng khách hàng mục tiêu là lập trình viên, có lộ trình phát triển, mục tiêu kinh doanh và chỉ số thành công rõ ràng. |
 | **Trải nghiệm lập trình viên** | Developer Experience (DX) | Tổng hòa cảm xúc, tốc độ tiếp cận, tính tiện dụng và sự hài lòng của lập trình viên khi tương tác với API, tài liệu, SDK và cộng đồng của sản phẩm. |
+| **Chân dung nhà phát triển** | Developer Personas | Hồ sơ mô tả đặc điểm, nhu cầu, hành vi và mục tiêu công việc của các nhóm lập trình viên tiêu thụ API (Frontend, Đối tác thứ ba, Kỹ sư tích hợp doanh nghiệp), định hướng thiết kế và tài liệu API. |
+| **Cổng thông tin lập trình viên** | Developer Portal | Điểm truy cập tự phục vụ tập trung dành cho nhà phát triển, cung cấp tài liệu tương tác (Swagger/Redoc), cơ chế đăng ký sinh API Key trong môi trường Sandbox, hướng dẫn tích hợp và diễn đàn hỗ trợ. |
+| **Mô hình định giá API** | API Pricing Models / Tiers | Chiến lược đóng gói và thu phí sử dụng dịch vụ API (Free, Freemium, Tiered Subscriptions theo hạn mức, hoặc Pay-per-use theo số lượng cuộc gọi). |
 | **Thời gian tạo cuộc gọi đầu tiên** | Time To First Hello World (TTFHW) | Khoảng thời gian từ lúc một lập trình viên truy cập Developer Portal lần đầu tiên cho đến khi thực hiện thành công cuộc gọi API có kết quả đầu tiên (mục tiêu tiêu chuẩn là < 5 phút). |
 | **Tiếp cận ưu tiên đặc tả** | Design-First / Contract-First | Phương pháp luận viết và thống nhất tài liệu đặc tả API (OpenAPI spec) trước khi tiến hành viết code backend, cho phép frontend/client phát triển song song thông qua mock server. |
 | **Giới hạn lưu lượng** | Rate Limiting | Kỹ thuật khống chế số lượng yêu cầu mà một client (hoặc một API key) có thể gửi tới API trong một đơn vị thời gian (ví dụ: 100 requests/phút) nhằm chống tấn công DoS và bảo vệ tài nguyên hạ tầng. |
 | **Khả năng quan sát** | Observability | Khả năng thấu hiểu trạng thái bên trong của hệ thống API dựa trên dữ liệu đầu ra từ 3 trụ cột: Nhật ký (Logs), Chỉ số hiệu năng (Metrics) và Dấu vết phân tán (Distributed Traces). |
 | **Ngừng hỗ trợ & Đóng dịch vụ** | Deprecation & Sunsetting | Quy trình thông báo trước rằng một phiên bản API sắp hết hạn hỗ trợ (Deprecation) và thời điểm chính thức ngắt kết nối ngừng hoạt động vĩnh viễn (Sunsetting). |
+
+---
+
+## 4. Bảo Mật API, Kiểm Thử & Vận Hành Dịch Vụ (Security, Testing & Operations)
+
+| Thuật ngữ | Thuật ngữ tiếng Anh | Định nghĩa & Ý nghĩa kiến trúc |
+| :--- | :--- | :--- |
+| **Xác thực** | Authentication (AuthN) | Quá trình kiểm tra và xác nhận danh tính của client hoặc người dùng gửi yêu cầu ("Bạn là ai?"). Thường sử dụng API Key, Basic Auth, hoặc JWT Bearer Token. |
+| **Phân quyền** | Authorization (AuthZ) | Quá trình xác định các quyền hạn và hành động cụ thể mà danh tính đã xác thực được phép thực thi trên hệ thống ("Bạn được phép làm gì?"). |
+| **Kiểm soát truy cập dựa trên vai trò** | Role-Based Access Control (RBAC) | Mô hình bảo mật gán quyền hạn theo vai trò (Roles như Admin, User, Moderator) thay vì gán trực tiếp cho từng cá nhân, giúp quản lý phân quyền API an toàn và mở rộng tốt. |
+| **Mã thông báo web JSON** | JSON Web Token (JWT) | Chuẩn mở (RFC 7519) định nghĩa phương thức nhỏ gọn, khép kín để truyền tải thông tin an toàn giữa các bên dưới dạng đối tượng JSON có chữ ký số (HMAC hoặc RSA). |
+| **Kiểm thử hợp đồng** | Contract Testing | Kỹ thuật kiểm thử tự động nhằm đảm bảo cả Service Provider và Service Consumer đều tuân thủ chính xác bản đặc tả hợp đồng (OpenAPI spec), phát hiện sớm breaking changes. |
+| **Kiểm tra sức khỏe dịch vụ** | Health Check (Liveness & Readiness) | Các endpoint tiêu chuẩn (`/healthz`, `/livez`, `/readyz`) cho phép hạ tầng vận hành (Docker, Kubernetes, Gateway) kiểm tra xem tiến trình dịch vụ có đang sống và sẵn sàng nhận request hay không. |
+| **Bóp nghẽn lưu lượng** | Throttling & Traffic Shaping | Cơ chế làm chậm hoặc từ chối có kiểm soát các request vượt ngưỡng hạn ngạch nhằm bảo vệ backend khỏi tình trạng sập nguồn do quá tải đột biến (Spike). |
+| **Cam kết mức dịch vụ** | SLA / SLO / SLI | Bộ ba chỉ số độ tin cậy: **SLI** (chỉ số đo thực tế như latency p95/p99), **SLO** (mục tiêu mong muốn như 99.9% request < 200ms), **SLA** (cam kết pháp lý/thương mại với khách hàng kèm mức bồi thường). |
+| **Quản trị vòng đời API** | API Lifecycle Management | Toàn bộ tiến trình quản lý một API từ khâu lên ý tưởng (Ideation), thiết kế hợp đồng (Design-First), lập trình (Implementation), kiểm thử (Testing), vận hành (Operation), đến đóng dịch vụ (Retirement). |
+
+

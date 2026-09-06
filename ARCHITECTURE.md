@@ -13,7 +13,7 @@ It places the **student's deep thinking and hands-on implementation** at the cen
 flowchart TD
     subgraph KNOWLEDGE["Tier 1 & Tier 2: Static & Cached Knowledge Base"]
         AGENTS["AGENTS.md\n(Always-Active Orchestrator)"]
-        SYLLABUS[".agents/context/syllabus.md\n(15-Week Curriculum Schedule)"]
+        SYLLABUS[".agents/context/syllabus.md\n(13-Week Curriculum Schedule)"]
         PATTERNS[".agents/context/api-design-patterns-notes.md\n(JJ Geewax)"]
         PRODUCT[".agents/context/building-api-product-notes.md\n(Bruno Pedro)"]
         GLOSSARY[".agents/context/glossary-soa.md\n(Bilingual Lexicon)"]
