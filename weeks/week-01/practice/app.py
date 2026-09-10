@@ -3,6 +3,9 @@ from uuid import uuid4
 
 app = Flask(__name__)
 
+app.json.sort_keys = False
+app.json.ensure_ascii = False
+
 STUDENTS = []
 
 @app.route("/students", methods = ["POST"])
@@ -17,7 +20,7 @@ def create_student():
         "gpa": body.get("gpa", 0.0)
     }
     STUDENTS.append(student)
-    return jsonify({"id": student["id"], "name": student["name"]}), 201
+    return jsonify({"id": student["id"], "name": student["name"], "gpa": student["gpa"]}), 201
 
 @app.route("/health", methods = ["GET"])
 def health():
