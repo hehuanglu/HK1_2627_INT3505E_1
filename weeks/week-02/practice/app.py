@@ -2,18 +2,11 @@ from flask import Flask, jsonify, request, make_response, Response
 
 app = Flask(__name__)
 
+# -- tham số phân trang 
+DEFAULT_SZIE, MAX_SIZE = 20, 100
+
 BOOKS = []
 _next = 1
-
-# GET /books 
-@app.get("/books") 
-def list_books():
-    return jsonify (
-        {
-            "data" : BOOKS,
-            "total" : len(BOOKS)
-        }
-    ), 200
 
 # POST /books
 @app.post("/books")
@@ -104,5 +97,69 @@ def delete(id):
     BOOKS.pop(i)
     return Response(status=204)
 
+# list + filter + paginate + links
+@app.get("/books")
+def query():
+    try:
+        page = int(request.args.get("page", 1))
+        size = int(request.args.get("size", DEFAULT_SZIE))
+    except ValueError:
+        return jsonify(error = "page and size must be integers"), 422
+
+    page = max(page, 1)
+    size = min(max(size, 1), MAX_SIZE)
+
+    # author chính xác, q tìm trong title
+    flt = BOOKS
+
+    a = request.args.get("author")
+    if a:
+        flt = [b for b in flt if b.get("author").lower() == a.lower()]
+
+    q = (request.args.get("q") or "").strip()
+    if q:
+        flt = [b for b in flt if q.lower() in b.get("title", "").lower()]
+
+    # paginate
+    total = len(flt)
+    start = (page - 1) * size
+    end = start + size
+    data = flt[start:end]
+    last_page = (total + size - 1) // size 
+
+    # HATEOAS links 
+    def u(p):
+        return f"/books?page={p}&size={size}"
+
+    links = {
+        "self": {"href": u(page)},
+        "first": {"href": u(1)},
+        "last": {"href": u(max(last_page, 1))}
+    }
+
+    if page > 1:
+        links["prev"] = {"href": u(page - 1)}
+
+    if end < total:
+        links["next"] = {"href": u(page + 1)}
+
+    body = {
+        "data": data,
+        "pagination": {
+            "page": page,
+            "size": size,
+            "total": total,
+            "total_pages": last_page
+        },
+        "links": links
+    }
+
+    resp = make_response(jsonify(body), 200)
+    resp.headers["Cache-Control"] = "public, max-age=30"
+    return resp
+
+
+
 if __name__ == "__main__":
     run = app.run(host="127.0.0.1", port=5002, debug=True)
+    
