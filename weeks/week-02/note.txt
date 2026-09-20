@@ -1,0 +1,26 @@
+REST là phong cách thiết kế
+login —> token, request kèm token —> stateless
+cache ~ context: nhiều người xem
+kiến trúc | đặc trưng chuyển đi
+client - server: Trước khi xuất hiện REST, hay trộn vào 
+cacheable: data không muốn gửi đi gửi lại
+uniform interface: cần làm rõ 4 điểm (điểm cuối - optional)
+backend:
+- resource là gì ? - giá trị của dữ liệu
+- URI viết sao 
+- resource khác representation
+phân lớp (layered system)
+REST tập trung vào respurce | RPC tập trung vào hành động (thực hiện như nào)
+
+idempotency - bất biến: dù gọi nhiều lần vẫn thế
+safety: an toàn
+Phân loại HTTP request:
+ - 1 là thông tin
+ - 2 là thành công
+ - 3 là chuyển tiếp
+ - 4 là lỗi
+ - 5 là lỗi server
+header: Content - type: trả về cái gì, Content-length
+
+một số điểm chưa hiểu:
+ - hiểu rõ cơ chế cache với các trường thông tin nhạy cảm ?
