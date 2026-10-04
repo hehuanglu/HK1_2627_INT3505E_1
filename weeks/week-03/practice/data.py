@@ -1,4 +1,16 @@
-POSTS = [
-    {"id": 1, "title": "Giới thiệu SOA", "content": "SOA là..."},
-    {"id": 2, "title": "REST API cơ bản", "content": "REST là..."},
-]
+from flask_sqlalchemy import SQLAlchemy
+
+
+db = SQLAlchemy()
+
+
+class Post(db.Model):
+    __tablename__ = "posts"
+
+    id = db.Column(db.Integer, primary_key=True)
+    title = db.Column(db.String(200), nullable=False)
+    content = db.Column(db.Text, nullable=False)
+
+    def to_dict(self):
+        return {"id": self.id, "title": self.title, "content": self.content}
+
