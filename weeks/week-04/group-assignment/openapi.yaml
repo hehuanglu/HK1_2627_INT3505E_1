@@ -1,0 +1,435 @@
+openapi: 3.0.3
+info:
+  title: Books API
+  version: 1.0.0
+  description: Đặc tả quản lý sách theo contract thống nhất của nhóm. Các ví dụ mô tả dữ liệu và phản
+    hồi dự kiến. GET công khai; POST, PATCH và DELETE yêu cầu bearer token theo thiết kế. Đặc tả này chưa
+    xác nhận hành vi của backend đang chạy.
+servers:
+- url: http://localhost:5000/v1
+  description: Địa chỉ dự kiến của backend; cần cấu hình lại nếu triển khai ở địa chỉ khác.
+tags:
+- name: books
+  description: Xem, thêm, cập nhật và xóa sách.
+paths:
+  /books:
+    get:
+      tags:
+      - books
+      summary: Xem danh sách sách
+      description: Trả về danh sách sách. Có thể sử dụng tham số q để tìm kiếm trong title và tham số
+        limit để giới hạn số sách trả về. Khi không gửi q, danh sách không được lọc theo title.
+      operationId: listBooks
+      parameters:
+      - $ref: '#/components/parameters/SearchQuery'
+      - $ref: '#/components/parameters/PageLimit'
+      security: []
+      responses:
+        '200':
+          $ref: '#/components/responses/BookList'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        default:
+          $ref: '#/components/responses/UnexpectedError'
+    post:
+      tags:
+      - books
+      summary: Thêm sách mới
+      description: Tạo sách với title và author bắt buộc; isbn và price tùy chọn. Không nhận id, trường
+        lạ hoặc null. Máy chủ cấp id và trả Location của sách mới. Yêu cầu bearer token hợp lệ.
+      operationId: createBook
+      security:
+      - bearerAuth: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreateBookInput'
+            example:
+              title: Lập trình Python cơ bản
+              author: Nguyễn Văn An
+              isbn: '9786040000000'
+              price: 120000
+      responses:
+        '201':
+          $ref: '#/components/responses/BookCreated'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '422':
+          $ref: '#/components/responses/ValidationError'
+        default:
+          $ref: '#/components/responses/UnexpectedError'
+  /books/{bookId}:
+    get:
+      tags:
+      - books
+      summary: Xem thông tin một sách
+      description: Trả về thông tin sách theo bookId. BookId phải là số nguyên lớn hơn hoặc bằng 1. Trả
+        về 400 nếu bookId không hợp lệ và 404 nếu không tìm thấy sách.
+      operationId: getBookById
+      parameters:
+      - $ref: '#/components/parameters/BookId'
+      security: []
+      responses:
+        '200':
+          $ref: '#/components/responses/BookResponse'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        default:
+          $ref: '#/components/responses/UnexpectedError'
+    patch:
+      tags:
+      - books
+      summary: Cập nhật một phần thông tin sách
+      description: Cập nhật ít nhất một trường trong title, author, isbn hoặc price. Chỉ thay đổi trường
+        được gửi; các trường còn lại giữ nguyên. Không nhận id, trường lạ hoặc null và không tự điền giá
+        trị mặc định. Body rỗng trả 422. Yêu cầu bearer token hợp lệ.
+      operationId: patchBook
+      parameters:
+      - $ref: '#/components/parameters/BookId'
+      security:
+      - bearerAuth: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UpdateBookInput'
+            example:
+              price: 150000
+      responses:
+        '200':
+          description: Thông tin đầy đủ của sách sau cập nhật.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Book'
+              example:
+                id: 1
+                title: Lập trình Python cơ bản
+                author: Nguyễn Văn An
+                isbn: '9786040000000'
+                price: 150000
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '422':
+          $ref: '#/components/responses/ValidationError'
+        default:
+          $ref: '#/components/responses/UnexpectedError'
+    delete:
+      tags:
+      - books
+      summary: Xóa một sách theo mã sách
+      description: Xóa sách có bookId là số nguyên lớn hơn hoặc bằng 1. Yêu cầu bearer token hợp lệ. Khi
+        xóa thành công, trả về mã 204 và không có nội dung phản hồi. Trả về 400 nếu mã sách không hợp
+        lệ, 401 nếu thiếu hoặc sai mã xác thực, 404 nếu không tìm thấy sách.
+      operationId: deleteBook
+      parameters:
+      - $ref: '#/components/parameters/BookId'
+      security:
+      - bearerAuth: []
+      responses:
+        '204':
+          description: Xóa sách thành công, không có nội dung phản hồi.
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        default:
+          $ref: '#/components/responses/UnexpectedError'
+components:
+  schemas:
+    Book:
+      type: object
+      required:
+      - id
+      - title
+      - author
+      properties:
+        id:
+          type: integer
+          minimum: 1
+          readOnly: true
+          description: Mã định danh của sách.
+          example: 1
+        title:
+          type: string
+          minLength: 1
+          description: Tiêu đề của sách.
+          example: Lập trình Python cơ bản
+        author:
+          type: string
+          minLength: 1
+          description: Tác giả của sách.
+          example: Nguyễn Văn An
+        isbn:
+          type: string
+          description: Mã số tiêu chuẩn quốc tế cho sách (ISBN).
+          example: '9786040000000'
+        price:
+          type: number
+          minimum: 0
+          description: Giá của sách, đơn vị VND; phải lớn hơn hoặc bằng 0.
+          example: 120000
+      example:
+        id: 1
+        title: Lập trình Python cơ bản
+        author: Nguyễn Văn An
+        isbn: '9786040000000'
+        price: 120000
+    CreateBookInput:
+      type: object
+      required:
+      - title
+      - author
+      additionalProperties: false
+      properties:
+        title:
+          type: string
+          minLength: 1
+          description: Tiêu đề của sách.
+          example: Lập trình Python cơ bản
+        author:
+          type: string
+          minLength: 1
+          description: Tác giả của sách.
+          example: Nguyễn Văn An
+        isbn:
+          type: string
+          description: Mã số tiêu chuẩn quốc tế cho sách (ISBN).
+          example: '9786040000000'
+        price:
+          type: number
+          minimum: 0
+          description: Giá của sách, đơn vị VND; phải lớn hơn hoặc bằng 0.
+          example: 120000
+      example:
+        title: Lập trình Python cơ bản
+        author: Nguyễn Văn An
+        isbn: '9786040000000'
+        price: 120000
+    UpdateBookInput:
+      type: object
+      minProperties: 1
+      additionalProperties: false
+      properties:
+        title:
+          type: string
+          minLength: 1
+          description: Tiêu đề của sách.
+          example: Lập trình Python cơ bản
+        author:
+          type: string
+          minLength: 1
+          description: Tác giả của sách.
+          example: Nguyễn Văn An
+        isbn:
+          type: string
+          description: Mã số tiêu chuẩn quốc tế cho sách (ISBN).
+          example: '9786040000000'
+        price:
+          type: number
+          minimum: 0
+          description: Giá của sách, đơn vị VND; phải lớn hơn hoặc bằng 0.
+          example: 150000
+      example:
+        price: 150000
+      description: Gửi ít nhất một trường cần sửa. Trường không gửi giữ nguyên; không tự điền giá trị
+        mặc định và không nhận null để xóa trường.
+    Error:
+      type: object
+      required:
+      - status
+      - title
+      properties:
+        type:
+          type: string
+          format: uri
+          description: URI định danh loại lỗi.
+          example: about:blank
+        title:
+          type: string
+          description: Mô tả ngắn gọn về loại lỗi.
+          example: Unprocessable Entity
+        status:
+          type: integer
+          minimum: 400
+          maximum: 599
+          description: Mã trạng thái HTTP của lỗi; phải khớp mã HTTP thực tế của phản hồi.
+          example: 422
+        detail:
+          type: string
+          description: Mô tả chi tiết về nguyên nhân cụ thể gây ra lỗi.
+          example: Giá sách không được âm; price phải là số lớn hơn hoặc bằng 0, đơn vị VND.
+        instance:
+          type: string
+          format: uri-reference
+          description: URI tham chiếu đến lần xảy ra lỗi cụ thể; có thể dùng đường dẫn của yêu cầu.
+          example: /v1/books/1
+      example:
+        type: about:blank
+        title: Unprocessable Entity
+        status: 422
+        detail: Giá sách không được âm; price phải là số lớn hơn hoặc bằng 0, đơn vị VND.
+        instance: /v1/books/1
+  parameters:
+    BookId:
+      name: bookId
+      in: path
+      required: true
+      description: Mã định danh của sách; phải là số nguyên lớn hơn hoặc bằng 1.
+      schema:
+        type: integer
+        minimum: 1
+      example: 1
+    SearchQuery:
+      name: q
+      in: query
+      required: false
+      description: Nội dung tùy chọn dùng để tìm kiếm trong title của sách.
+      schema:
+        type: string
+      example: Python
+    PageLimit:
+      name: limit
+      in: query
+      required: false
+      description: Số lượng sách tối đa được trả về.
+      schema:
+        type: integer
+        minimum: 1
+        maximum: 100
+        default: 20
+      example: 20
+  responses:
+    BookList:
+      description: Danh sách sách phù hợp với điều kiện tìm kiếm.
+      content:
+        application/json:
+          schema:
+            type: array
+            items:
+              $ref: '#/components/schemas/Book'
+          examples:
+            oneBook:
+              summary: Danh sách có một sách
+              value:
+              - id: 1
+                title: Lập trình Python cơ bản
+                author: Nguyễn Văn An
+                isbn: '9786040000000'
+                price: 120000
+            emptyList:
+              summary: Danh sách không có sách phù hợp
+              value: []
+    BookResponse:
+      description: Thông tin của sách được yêu cầu.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Book'
+          example:
+            id: 1
+            title: Lập trình Python cơ bản
+            author: Nguyễn Văn An
+            isbn: '9786040000000'
+            price: 120000
+    BookCreated:
+      description: Tạo sách thành công; trả thông tin sách và địa chỉ của sách mới trong header Location.
+      headers:
+        Location:
+          description: Địa chỉ của sách vừa được tạo.
+          schema:
+            type: string
+          example: /v1/books/1
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Book'
+          example:
+            id: 1
+            title: Lập trình Python cơ bản
+            author: Nguyễn Văn An
+            isbn: '9786040000000'
+            price: 120000
+    BadRequest:
+      description: Tham số yêu cầu không hợp lệ hoặc nội dung JSON không đọc được.
+      content:
+        application/problem+json:
+          schema:
+            $ref: '#/components/schemas/Error'
+          example:
+            type: about:blank
+            title: Bad Request
+            status: 400
+            detail: Nội dung JSON của yêu cầu sửa sách không đọc được do sai cú pháp.
+            instance: /v1/books/1
+    Unauthorized:
+      description: Yêu cầu thiếu bearer token hoặc bearer token không hợp lệ.
+      content:
+        application/problem+json:
+          schema:
+            $ref: '#/components/schemas/Error'
+          example:
+            type: about:blank
+            title: Unauthorized
+            status: 401
+            detail: Yêu cầu thiếu bearer token trong header Authorization.
+            instance: /v1/books/1
+    NotFound:
+      description: Không tìm thấy sách có mã được yêu cầu.
+      content:
+        application/problem+json:
+          schema:
+            $ref: '#/components/schemas/Error'
+          example:
+            type: about:blank
+            title: Not Found
+            status: 404
+            detail: Không tìm thấy sách có bookId bằng 1.
+            instance: /v1/books/1
+    ValidationError:
+      description: Dữ liệu thêm hoặc sửa sách không đáp ứng các ràng buộc của schema.
+      content:
+        application/problem+json:
+          schema:
+            $ref: '#/components/schemas/Error'
+          example:
+            type: about:blank
+            title: Unprocessable Entity
+            status: 422
+            detail: Giá sách không được âm; price phải là số lớn hơn hoặc bằng 0, đơn vị VND.
+            instance: /v1/books/1
+    UnexpectedError:
+      description: Lỗi ngoài các mã phản hồi đã khai báo cụ thể, ví dụ lỗi nội bộ máy chủ 500. Giá trị
+        status trong nội dung lỗi phải khớp mã HTTP thực tế.
+      content:
+        application/problem+json:
+          schema:
+            $ref: '#/components/schemas/Error'
+          example:
+            type: about:blank
+            title: Internal Server Error
+            status: 500
+            detail: Máy chủ gặp lỗi nội bộ khi xử lý yêu cầu đối với sách.
+            instance: /v1/books/1
+  securitySchemes:
+    bearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+      description: Xác thực bằng bearer token định dạng JWT trong header Authorization, theo dạng Bearer
+        theo sau bởi một dấu cách và token. Áp dụng cho POST, PATCH và DELETE theo thiết kế của bài YAML;
+        GET không yêu cầu xác thực. Khai báo này mô tả hợp đồng, chưa khẳng định có chương trình thực
+        thi.
