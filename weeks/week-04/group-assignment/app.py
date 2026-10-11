@@ -1,18 +1,22 @@
 """Books API cơ bản: lưu trong bộ nhớ và xác thực JWT cho các route ghi."""
 import json
 import os
+from pathlib import Path
 from datetime import datetime, timedelta, timezone
 from functools import wraps
 from http import HTTPStatus
 from math import isfinite
 
 import jwt
-from flask import Flask, jsonify, request
+import yaml
+from flask import Flask, jsonify, request, send_from_directory
+from swagger_ui_bundle import swagger_ui_path
 from werkzeug.exceptions import HTTPException
 
 app = Flask(__name__)
 app.json.ensure_ascii = False
 app.config["JWT_SECRET"] = os.environ.get("JWT_SECRET", "soa-week05-local-demo-secret-change-before-deployment")
+OPENAPI_FILE = Path(__file__).with_name("openapi.yaml")
 
 # Dữ liệu mất khi khởi động lại ứng dụng.
 books = {}
@@ -108,6 +112,50 @@ def index():
     return {"message": "Ứng dụng Flask đang chạy."}
 
 
+@app.get("/openapi.json")
+def openapi_document():
+    """Phục vụ OpenAPI dưới dạng JSON cho Swagger UI và công cụ client."""
+    try:
+        with OPENAPI_FILE.open(encoding="utf-8") as spec_file:
+            spec = yaml.safe_load(spec_file)
+    except (OSError, yaml.YAMLError):
+        app.logger.exception("Không thể đọc openapi.yaml")
+        return error(500, "Không thể tải tài liệu OpenAPI.")
+    return jsonify(spec)
+
+
+@app.get("/docs")
+def swagger_docs():
+    """Hiển thị Swagger UI dùng tài liệu OpenAPI của ứng dụng."""
+    return """<!doctype html>
+<html lang="vi">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Books API — Swagger UI</title>
+    <link rel="stylesheet" href="/docs/swagger-ui.css">
+  </head>
+  <body>
+    <div id="swagger-ui"></div>
+    <script src="/docs/swagger-ui-bundle.js"></script>
+    <script>
+      window.onload = () => SwaggerUIBundle({
+        url: "/openapi.json",
+        dom_id: "#swagger-ui",
+        deepLinking: true,
+        presets: [SwaggerUIBundle.presets.apis],
+        layout: "BaseLayout"
+      });
+    </script>
+  </body>
+</html>"""
+
+
+@app.get("/docs/<path:asset>")
+def swagger_asset(asset):
+    return send_from_directory(swagger_ui_path, asset)
+
+
 @app.get("/v1/books")
 def list_books():
     try:
@@ -166,4 +214,5 @@ def delete_book(book_id):
 
 
 if __name__ == "__main__":
-    app.run(host="127.0.0.1", port=5000)
+    port = int(os.environ.get("PORT", "5001"))
+    app.run(host="127.0.0.1", port=port)
