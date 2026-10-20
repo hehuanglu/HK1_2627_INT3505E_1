@@ -1,0 +1,156 @@
+{
+  "info": {
+    "name": "Week 05 - Books pagination",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "variable": [
+    {
+      "key": "base_url",
+      "value": "http://localhost:5000"
+    },
+    {
+      "key": "cursor",
+      "value": ""
+    }
+  ],
+  "item": [
+    {
+      "name": "Offset - first page",
+      "request": {
+        "method": "GET",
+        "url": "{{base_url}}/api/v1/books?strategy=offset&genre=tech&sort=-price,title&limit=1&offset=0"
+      },
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test(\"Status 200\", () => pm.response.to.have.status(200));",
+              "const body = pm.response.json();",
+              "pm.test(\"Offset page\", () => { pm.expect(body.data).to.have.lengthOf(1); pm.expect(body.pagination.offset).to.eql(0); pm.expect(body.pagination.has_next).to.eql(true); });",
+              "pm.collectionVariables.set(\"offset_first_id\", body.data[0].id);",
+              "pm.collectionVariables.set(\"total\", body.pagination.total);"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "name": "Offset - next page",
+      "request": {
+        "method": "GET",
+        "url": "{{base_url}}/api/v1/books?strategy=offset&genre=tech&sort=-price,title&limit=1&offset=1"
+      },
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test(\"Status 200\", () => pm.response.to.have.status(200));",
+              "const body = pm.response.json();",
+              "pm.test(\"Next offset\", () => { pm.expect(body.pagination.offset).to.eql(1); pm.expect(body.pagination.total).to.eql(Number(pm.collectionVariables.get(\"total\"))); pm.expect(body.data[0].id).not.to.eql(Number(pm.collectionVariables.get(\"offset_first_id\"))); });"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "name": "Cursor - first page",
+      "request": {
+        "method": "GET",
+        "url": "{{base_url}}/api/v1/books?strategy=cursor&genre=tech&sort=-price,title&limit=1"
+      },
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test(\"Status 200\", () => pm.response.to.have.status(200));",
+              "const body = pm.response.json();",
+              "pm.test(\"Has cursor\", () => { pm.expect(body.data).to.have.lengthOf(1); pm.expect(body.page.more).to.eql(true); pm.expect(body.page.next).to.be.a(\"string\"); });",
+              "pm.collectionVariables.set(\"cursor\", body.page.next);",
+              "pm.collectionVariables.set(\"cursor_first_id\", body.data[0].id);"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "name": "Cursor - next page",
+      "request": {
+        "method": "GET",
+        "url": "{{base_url}}/api/v1/books?strategy=cursor&genre=tech&sort=-price,title&limit=1&cursor={{cursor}}"
+      },
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test(\"Status 200\", () => pm.response.to.have.status(200));",
+              "const body = pm.response.json();",
+              "pm.test(\"Different book\", () => { pm.expect(body.data).to.have.lengthOf(1); pm.expect(body.data[0].id).not.to.eql(Number(pm.collectionVariables.get(\"cursor_first_id\"))); });"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "name": "Genre - no results",
+      "request": {
+        "method": "GET",
+        "url": "{{base_url}}/api/v1/books?strategy=cursor&genre=unknown"
+      },
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test(\"Empty page\", () => { pm.response.to.have.status(200); const body = pm.response.json(); pm.expect(body.data).to.eql([]); pm.expect(body.page).to.eql({next: null, more: false}); });"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "name": "Invalid sort",
+      "request": {
+        "method": "GET",
+        "url": "{{base_url}}/api/v1/books?sort=foo"
+      },
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test(\"Status 400\", () => pm.response.to.have.status(400));"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "name": "Invalid strategy",
+      "request": {
+        "method": "GET",
+        "url": "{{base_url}}/api/v1/books?strategy=foo"
+      },
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test(\"Status 400\", () => pm.response.to.have.status(400));"
+            ]
+          }
+        }
+      ]
+    }
+  ]
+}
