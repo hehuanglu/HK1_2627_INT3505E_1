@@ -1,0 +1,43 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "Loan",
+  "type": "object",
+  "required": [
+    "id",
+    "book_id",
+    "member_id",
+    "borrowed_at",
+    "due_at",
+    "returned_at"
+  ],
+  "additionalProperties": false,
+  "properties": {
+    "id": {
+      "type": "integer",
+      "minimum": 1
+    },
+    "book_id": {
+      "type": "integer",
+      "minimum": 1
+    },
+    "member_id": {
+      "type": "integer",
+      "minimum": 1
+    },
+    "borrowed_at": {
+      "type": "string",
+      "format": "date"
+    },
+    "due_at": {
+      "type": "string",
+      "format": "date"
+    },
+    "returned_at": {
+      "type": [
+        "string",
+        "null"
+      ],
+      "format": "date"
+    }
+  }
+}

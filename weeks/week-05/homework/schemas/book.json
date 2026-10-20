@@ -1,0 +1,35 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "Book",
+  "type": "object",
+  "required": [
+    "id",
+    "title",
+    "isbn",
+    "genre",
+    "total_copies"
+  ],
+  "additionalProperties": false,
+  "properties": {
+    "id": {
+      "type": "integer",
+      "minimum": 1
+    },
+    "title": {
+      "type": "string",
+      "minLength": 1
+    },
+    "isbn": {
+      "type": "string",
+      "pattern": "^[0-9]{13}$"
+    },
+    "genre": {
+      "type": "string",
+      "minLength": 1
+    },
+    "total_copies": {
+      "type": "integer",
+      "minimum": 0
+    }
+  }
+}
