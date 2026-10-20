@@ -1,0 +1,21 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "type": "object",
+  "required": ["title", "price"],
+  "additionalProperties": false,
+  "properties": {
+    "title": {"type": "string", "minLength": 1},
+    "isbn": {"type": "string", "pattern": "^[0-9]{13}$"},
+    "price": {
+      "type": "object",
+      "required": ["amount", "currency"],
+      "additionalProperties": false,
+      "properties": {
+        "amount": {"type": "integer", "minimum": 0},
+        "currency": {"const": "VND"}
+      }
+    },
+    "stock": {"type": "integer", "minimum": 0},
+    "category_id": {"type": "integer", "minimum": 1}
+  }
+}
