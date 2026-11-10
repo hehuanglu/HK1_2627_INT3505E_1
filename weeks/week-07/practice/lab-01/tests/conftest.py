@@ -1,0 +1,26 @@
+import pytest
+
+from product_api import create_app
+from product_api.extensions import db
+
+
+@pytest.fixture
+def app():
+    app = create_app(
+        {
+            "TESTING": True,
+            "SQLALCHEMY_DATABASE_URI": "sqlite://",
+            "SQLALCHEMY_ENGINE_OPTIONS": {"pool_pre_ping": True},
+        }
+    )
+    with app.app_context():
+        db.create_all()
+    yield app
+    with app.app_context():
+        db.session.remove()
+        db.drop_all()
+
+
+@pytest.fixture
+def client(app):
+    return app.test_client()

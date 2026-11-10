@@ -1,0 +1,23 @@
+services:
+  api:
+    build: .
+    ports:
+      - "8080:5000"
+    environment:
+      DATABASE_URL: sqlite:////data/products.sqlite
+      FLASK_DEBUG: "0"
+    volumes:
+      - product_data:/data
+    healthcheck:
+      test:
+        - CMD
+        - python
+        - -c
+        - "from urllib.request import urlopen; urlopen('http://127.0.0.1:5000/ready', timeout=2)"
+      interval: 10s
+      timeout: 3s
+      retries: 3
+      start_period: 10s
+
+volumes:
+  product_data:

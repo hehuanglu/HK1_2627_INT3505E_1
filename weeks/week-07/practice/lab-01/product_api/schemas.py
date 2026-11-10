@@ -31,3 +31,34 @@ class ReserveIn(Schema):
 class PaginationQuery(Schema):
     page = fields.Int(load_default=1, validate=validate.Range(min=1))
     size = fields.Int(load_default=20, validate=validate.Range(min=1, max=100))
+
+
+class OrderItemIn(Schema):
+    product_id = fields.Int(required=True, validate=validate.Range(min=1))
+    quantity = fields.Int(required=True, validate=validate.Range(min=1))
+
+
+class OrderIn(Schema):
+    customer_name = fields.Str(required=True, validate=validate.Length(min=1, max=255))
+    items = fields.List(fields.Nested(OrderItemIn), required=True, validate=validate.Length(min=1))
+
+
+class OrderProductOut(Schema):
+    id = fields.Int()
+    sku = fields.Str()
+    name = fields.Str()
+
+
+class OrderItemOut(Schema):
+    id = fields.Int()
+    product_id = fields.Int()
+    quantity = fields.Int()
+    unit_price_cents = fields.Int()
+    product = fields.Nested(OrderProductOut)
+
+
+class OrderOut(Schema):
+    id = fields.Int()
+    customer_name = fields.Str()
+    created_at = fields.DateTime()
+    items = fields.List(fields.Nested(OrderItemOut))

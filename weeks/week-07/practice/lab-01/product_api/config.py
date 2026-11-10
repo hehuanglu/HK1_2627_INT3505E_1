@@ -7,3 +7,4 @@ class Config:
         "DATABASE_URL", "sqlite:///lab-01.sqlite"
     )
     SQLALCHEMY_TRACK_MODIFICATIONS = False
+    SQLALCHEMY_ENGINE_OPTIONS = {"pool_pre_ping": True}
