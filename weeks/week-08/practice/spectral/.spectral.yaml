@@ -1,1 +1,11 @@
 extends: spectral:oas
+functions:
+  - response200HasFields
+rules:
+  response-200-has-fields:
+    description: Every 200 response must define at least one schema field.
+    message: "200 response must have more than 0 fields in its schema."
+    severity: error
+    given: $.paths[*][*].responses['200']
+    then:
+      function: response200HasFields
