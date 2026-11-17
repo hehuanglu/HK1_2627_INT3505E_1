@@ -1,0 +1,273 @@
+[
+	{
+		"code": "info-contact",
+		"path": [
+			"info"
+		],
+		"message": "Info object must have \"contact\" object.",
+		"severity": 1,
+		"range": {
+			"start": {
+				"line": 1,
+				"character": 5
+			},
+			"end": {
+				"line": 6,
+				"character": 59
+			}
+		},
+		"source": "/Users/hahoangloc/Working/UET/SOA/weeks/week-08/practice/lab08-starter/openapi.yaml"
+	},
+	{
+		"code": "operation-description",
+		"path": [
+			"paths",
+			"/health",
+			"get"
+		],
+		"message": "Operation \"description\" must be present and non-empty string.",
+		"severity": 1,
+		"range": {
+			"start": {
+				"line": 11,
+				"character": 8
+			},
+			"end": {
+				"line": 21,
+				"character": 39
+			}
+		},
+		"source": "/Users/hahoangloc/Working/UET/SOA/weeks/week-08/practice/lab08-starter/openapi.yaml"
+	},
+	{
+		"code": "operation-tags",
+		"path": [
+			"paths",
+			"/health",
+			"get"
+		],
+		"message": "Operation must have non-empty \"tags\" array.",
+		"severity": 1,
+		"range": {
+			"start": {
+				"line": 11,
+				"character": 8
+			},
+			"end": {
+				"line": 21,
+				"character": 39
+			}
+		},
+		"source": "/Users/hahoangloc/Working/UET/SOA/weeks/week-08/practice/lab08-starter/openapi.yaml"
+	},
+	{
+		"code": "operation-description",
+		"path": [
+			"paths",
+			"/books",
+			"get"
+		],
+		"message": "Operation \"description\" must be present and non-empty string.",
+		"severity": 1,
+		"range": {
+			"start": {
+				"line": 23,
+				"character": 8
+			},
+			"end": {
+				"line": 42,
+				"character": 57
+			}
+		},
+		"source": "/Users/hahoangloc/Working/UET/SOA/weeks/week-08/practice/lab08-starter/openapi.yaml"
+	},
+	{
+		"code": "operation-tags",
+		"path": [
+			"paths",
+			"/books",
+			"get"
+		],
+		"message": "Operation must have non-empty \"tags\" array.",
+		"severity": 1,
+		"range": {
+			"start": {
+				"line": 23,
+				"character": 8
+			},
+			"end": {
+				"line": 42,
+				"character": 57
+			}
+		},
+		"source": "/Users/hahoangloc/Working/UET/SOA/weeks/week-08/practice/lab08-starter/openapi.yaml"
+	},
+	{
+		"code": "operation-description",
+		"path": [
+			"paths",
+			"/books",
+			"post"
+		],
+		"message": "Operation \"description\" must be present and non-empty string.",
+		"severity": 1,
+		"range": {
+			"start": {
+				"line": 43,
+				"character": 9
+			},
+			"end": {
+				"line": 57,
+				"character": 55
+			}
+		},
+		"source": "/Users/hahoangloc/Working/UET/SOA/weeks/week-08/practice/lab08-starter/openapi.yaml"
+	},
+	{
+		"code": "operation-tags",
+		"path": [
+			"paths",
+			"/books",
+			"post"
+		],
+		"message": "Operation must have non-empty \"tags\" array.",
+		"severity": 1,
+		"range": {
+			"start": {
+				"line": 43,
+				"character": 9
+			},
+			"end": {
+				"line": 57,
+				"character": 55
+			}
+		},
+		"source": "/Users/hahoangloc/Working/UET/SOA/weeks/week-08/practice/lab08-starter/openapi.yaml"
+	},
+	{
+		"code": "operation-description",
+		"path": [
+			"paths",
+			"/books/{id}",
+			"get"
+		],
+		"message": "Operation \"description\" must be present and non-empty string.",
+		"severity": 1,
+		"range": {
+			"start": {
+				"line": 64,
+				"character": 8
+			},
+			"end": {
+				"line": 72,
+				"character": 55
+			}
+		},
+		"source": "/Users/hahoangloc/Working/UET/SOA/weeks/week-08/practice/lab08-starter/openapi.yaml"
+	},
+	{
+		"code": "operation-tags",
+		"path": [
+			"paths",
+			"/books/{id}",
+			"get"
+		],
+		"message": "Operation must have non-empty \"tags\" array.",
+		"severity": 1,
+		"range": {
+			"start": {
+				"line": 64,
+				"character": 8
+			},
+			"end": {
+				"line": 72,
+				"character": 55
+			}
+		},
+		"source": "/Users/hahoangloc/Working/UET/SOA/weeks/week-08/practice/lab08-starter/openapi.yaml"
+	},
+	{
+		"code": "operation-description",
+		"path": [
+			"paths",
+			"/books/{id}",
+			"put"
+		],
+		"message": "Operation \"description\" must be present and non-empty string.",
+		"severity": 1,
+		"range": {
+			"start": {
+				"line": 73,
+				"character": 8
+			},
+			"end": {
+				"line": 87,
+				"character": 55
+			}
+		},
+		"source": "/Users/hahoangloc/Working/UET/SOA/weeks/week-08/practice/lab08-starter/openapi.yaml"
+	},
+	{
+		"code": "operation-tags",
+		"path": [
+			"paths",
+			"/books/{id}",
+			"put"
+		],
+		"message": "Operation must have non-empty \"tags\" array.",
+		"severity": 1,
+		"range": {
+			"start": {
+				"line": 73,
+				"character": 8
+			},
+			"end": {
+				"line": 87,
+				"character": 55
+			}
+		},
+		"source": "/Users/hahoangloc/Working/UET/SOA/weeks/week-08/practice/lab08-starter/openapi.yaml"
+	},
+	{
+		"code": "operation-description",
+		"path": [
+			"paths",
+			"/books/{id}",
+			"delete"
+		],
+		"message": "Operation \"description\" must be present and non-empty string.",
+		"severity": 1,
+		"range": {
+			"start": {
+				"line": 88,
+				"character": 11
+			},
+			"end": {
+				"line": 93,
+				"character": 55
+			}
+		},
+		"source": "/Users/hahoangloc/Working/UET/SOA/weeks/week-08/practice/lab08-starter/openapi.yaml"
+	},
+	{
+		"code": "operation-tags",
+		"path": [
+			"paths",
+			"/books/{id}",
+			"delete"
+		],
+		"message": "Operation must have non-empty \"tags\" array.",
+		"severity": 1,
+		"range": {
+			"start": {
+				"line": 88,
+				"character": 11
+			},
+			"end": {
+				"line": 93,
+				"character": 55
+			}
+		},
+		"source": "/Users/hahoangloc/Working/UET/SOA/weeks/week-08/practice/lab08-starter/openapi.yaml"
+	}
+]

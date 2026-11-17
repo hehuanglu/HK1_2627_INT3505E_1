@@ -1,0 +1,3 @@
+[submodule "lab08-starter"]
+	path = weeks/week-08/practice/lab08-starter
+	url = https://github.com/hehuanglu/lab08-starter.git

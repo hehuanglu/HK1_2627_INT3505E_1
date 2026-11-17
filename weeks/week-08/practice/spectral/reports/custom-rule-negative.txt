@@ -1,0 +1,18 @@
+
+/tmp/lab2-empty-response.yaml
+  2:6   warning  info-contact             Info object must have "contact" object.                        info
+  12:9  warning  operation-description    Operation "description" must be present and non-empty string.  paths./health.get
+  12:9  warning  operation-tags           Operation must have non-empty "tags" array.                    paths./health.get
+ 15:15    error  response-200-has-fields  200 response must have more than 0 fields in its schema.       paths./health.get.responses[200]
+  23:9  warning  operation-description    Operation "description" must be present and non-empty string.  paths./books.get
+  23:9  warning  operation-tags           Operation must have non-empty "tags" array.                    paths./books.get
+ 43:10  warning  operation-description    Operation "description" must be present and non-empty string.  paths./books.post
+ 43:10  warning  operation-tags           Operation must have non-empty "tags" array.                    paths./books.post
+  64:9  warning  operation-description    Operation "description" must be present and non-empty string.  paths./books/{id}.get
+  64:9  warning  operation-tags           Operation must have non-empty "tags" array.                    paths./books/{id}.get
+  73:9  warning  operation-description    Operation "description" must be present and non-empty string.  paths./books/{id}.put
+  73:9  warning  operation-tags           Operation must have non-empty "tags" array.                    paths./books/{id}.put
+ 88:12  warning  operation-description    Operation "description" must be present and non-empty string.  paths./books/{id}.delete
+ 88:12  warning  operation-tags           Operation must have non-empty "tags" array.                    paths./books/{id}.delete
+
+✖ 14 problems (1 error, 13 warnings, 0 infos, 0 hints)
