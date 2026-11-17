@@ -1,0 +1,61 @@
+newman
+
+Books API — Lab 3
+
+❏ books
+↳ GET /books — initial list
+  GET http://127.0.0.1:18978/books [200 OK, 167B, 51ms]
+  ✓  200 OK
+  ✓  body is array
+
+↳ POST /books — create
+  POST http://127.0.0.1:18978/books [201 CREATED, 259B, 7ms]
+  ✓  201 Created
+  ✓  positive id
+
+↳ GET /books/{id} — read
+  GET http://127.0.0.1:18978/books/1 [200 OK, 234B, 4ms]
+  ✓  200 OK
+  ✓  expected fields
+
+↳ PUT /books/{id} — replace
+  PUT http://127.0.0.1:18978/books/1 [200 OK, 242B, 5ms]
+  ✓  200 OK
+  ✓  updated title
+
+↳ DELETE /books/{id} — delete
+  DELETE http://127.0.0.1:18978/books/1 [204 NO CONTENT, 161B, 4ms]
+  ✓  204 No Content
+  ✓  empty body
+
+❏ error-cases
+↳ POST /books — missing title
+  POST http://127.0.0.1:18978/books [400 BAD REQUEST, 307B, 3ms]
+  ✓  400 Bad Request
+  ✓  validation code and message
+  ✓  title is required
+
+↳ GET /books/9999 — not found
+  GET http://127.0.0.1:18978/books/9999 [404 NOT FOUND, 220B, 3ms]
+  ✓  404 Not Found
+  ✓  not found code and message
+
+┌─────────────────────────┬──────────────────┬──────────────────┐
+│                         │         executed │           failed │
+├─────────────────────────┼──────────────────┼──────────────────┤
+│              iterations │                1 │                0 │
+├─────────────────────────┼──────────────────┼──────────────────┤
+│                requests │                7 │                0 │
+├─────────────────────────┼──────────────────┼──────────────────┤
+│            test-scripts │                7 │                0 │
+├─────────────────────────┼──────────────────┼──────────────────┤
+│      prerequest-scripts │                0 │                0 │
+├─────────────────────────┼──────────────────┼──────────────────┤
+│              assertions │               15 │                0 │
+├─────────────────────────┴──────────────────┴──────────────────┤
+│ total run duration: 179ms                                     │
+├───────────────────────────────────────────────────────────────┤
+│ total data received: 398B (approx)                            │
+├───────────────────────────────────────────────────────────────┤
+│ average response time: 11ms [min: 3ms, max: 51ms, s.d.: 16ms] │
+└───────────────────────────────────────────────────────────────┘
