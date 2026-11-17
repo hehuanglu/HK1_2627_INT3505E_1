@@ -1,0 +1,16 @@
+============================= test session starts ==============================
+platform darwin -- Python 3.13.2, pytest-9.2.0, pluggy-1.7.0 -- /Users/hahoangloc/Working/UET/SOA/weeks/week-08/practice/test/.venv/bin/python
+cachedir: .pytest_cache
+rootdir: /Users/hahoangloc/Working/UET/SOA/weeks/week-08/practice/test
+configfile: pytest.ini
+testpaths: .
+plugins: locust-2.47.0
+collecting ... collected 5 items
+
+test_lab01.py::test_list_books_returns_empty_array PASSED                [ 20%]
+test_lab01.py::test_get_missing_book_returns_not_found PASSED            [ 40%]
+test_lab01.py::test_create_book_requires_title PASSED                    [ 60%]
+test_lab01.py::test_get_deleted_book_returns_not_found PASSED            [ 80%]
+test_lab01.py::test_response_extra_field_blocked PASSED                  [100%]
+
+============================== 5 passed in 0.15s ===============================
